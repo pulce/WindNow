@@ -8,7 +8,9 @@ import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+
 import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -71,11 +73,12 @@ public class LoadSaveStations {
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] arr = line.split(sep);
+				if (arr.length > 2)
 				stations.add(new Station(arr[0], arr[1], arr[2].equals("true")));
 			}
 			br.close();
 		} catch (Exception e) {
-			printErrorToLog(e.toString());
+			printErrorToLog(e);
 		}
 		return stations;
 	}
@@ -94,7 +97,7 @@ public class LoadSaveStations {
 			}
 			bw.close();
 		} catch (Exception e) {
-			printErrorToLog(e.toString());
+			printErrorToLog(e);
 		}
 	}
 	
@@ -105,20 +108,22 @@ public class LoadSaveStations {
 		saveStations(stations);
 	}
 	
-	static void printErrorToLog(String line) {
+	static void printErrorToLog(Exception e) {
 		try {
 			if (!localDir.exists()) {
 				localDir.mkdirs();
 			}
+			String line = Arrays.toString(e.getStackTrace());
 			FileOutputStream fos = new FileOutputStream(errorLogFile);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-			bw.write(sdf.format(new Date()));
+			bw.write(sdf.format(new Date()) + "-------------");
+			bw.newLine();
 			bw.write(line);
 			bw.newLine();
 			bw.close();
-		} catch (Exception e) {
-			Log.e("Error writing errorLog", e.toString());
+		} catch (Exception ex) {
+			Log.e("Error writing errorLog", ex.toString());
 		}
 	}
 }

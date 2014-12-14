@@ -105,7 +105,7 @@ class DownloadWCStation {
 				patschText.add(line);
 			}
 		} catch (Exception e) {
-			LoadSaveStations.printErrorToLog(e.toString());
+			LoadSaveStations.printErrorToLog(e);
 		}
 		return patschText;
 	}
@@ -138,7 +138,7 @@ class DownloadWCStation {
 			out.close();
 
 		} catch (Exception e) {
-			LoadSaveStations.printErrorToLog(e.toString());
+			LoadSaveStations.printErrorToLog(e);
 		}
 		return filename;
 	}

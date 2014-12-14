@@ -118,6 +118,8 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		case R.id.action_refresh:
 			for (Station st : objects) {
+				st.setLoaded(false);
+				stAda.notifyDataSetChanged();
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 					new DownloadStation(st).executeOnExecutor(
 							AsyncTask.THREAD_POOL_EXECUTOR, st.getUrl());

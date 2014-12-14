@@ -73,7 +73,7 @@ public class StationPic extends ActionBarActivity {
 			pic = BitmapFactory.decodeStream(is);
 			is.close();
 		} catch (Exception e) {
-			LoadSaveStations.printErrorToLog(e.toString());
+			LoadSaveStations.printErrorToLog(e);
 		}
 		imageDetail.setImageBitmap(pic);
 		imageDetail.setOnTouchListener(new View.OnTouchListener() {
