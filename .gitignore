@@ -1,0 +1,7 @@
+.classpath
+.settings
+launcher*
+bin/
+libs/
+drawable/
+lint.xml

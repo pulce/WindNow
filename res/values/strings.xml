@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="about">About this App</string>
+    <string name="about_close_button">Close</string>
+    <string name="action_about">About this App</string>
+    <string name="app_name">WindNow</string>
+    <string name="dialog_uname">Name for new station</string>
+    <string name="dialog_url">URL for new station</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_new_station">Create new station</string>
+    <string name="action_refresh">Refresh all stations</string>
+    <string name="title_activity_station_text">StationText</string>
+    <string name="title_activity_station_pic">StationPic</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="authors_note">        Contact: pulce@gmx.at \n
+        Copyright 2014 \n
+        by Florian Hauser</string>
+    <string name="legal_notice">
+    Dependencies:\n
+    jsoup - http://jsoup.org/ \n
+    \n
+    License: \n  
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version. \n
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details. \n
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses/.</string>
+    <string name="pref_dialog_title_dir">Dir for stations file relative to /sdcard/</string>
+    <string name="pref_title_dir">Select directory for stations file</string>
+    
+</resources>
