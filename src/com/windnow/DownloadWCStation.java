@@ -50,6 +50,7 @@ class DownloadWCStation {
 				input = assetManager.open("dummy");
 				doc = Jsoup
 						.parse(input, "UTF-8", "http://www.wetteronline.de/");
+				input.close();
 			} else {
 				doc = Jsoup.connect(
 						"http://www.wetteronline.de/aktuelles-wetter?gid="

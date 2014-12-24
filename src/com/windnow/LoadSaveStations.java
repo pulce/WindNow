@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
+import android.content.res.AssetManager;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -20,8 +22,8 @@ import android.util.Log;
  * 
  * This Class is part of WindNow.
  * 
- * It is responsible for writing and loading the stations file.
- * Also for writing the error log.
+ * It is responsible for writing and loading the stations file. Also for writing
+ * the error log.
  * 
  * @author Florian Hauser Copyright (C) 2014
  * 
@@ -61,22 +63,32 @@ public class LoadSaveStations {
 
 	public static ArrayList<Station> loadStations() {
 		ArrayList<Station> stations = new ArrayList<Station>();
-		if (!localDir.exists()) {
-			localDir.mkdirs();
-		}
-		if (!stationsFile.exists()) {
-			saveStandardStations();
-		}
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(stationsFile));
+			if (!localDir.exists()) {
+				localDir.mkdirs();
+			}
+			BufferedReader br = null;
+			boolean saveFile = !stationsFile.exists();
+			if (saveFile) {
+				AssetManager assetManager = OnlyContext.getContext()
+						.getAssets();
+				br = new BufferedReader(new InputStreamReader(
+						assetManager.open("stations.txt")));
+			} else {
+				br = new BufferedReader(new FileReader(stationsFile));
+			}
+
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] arr = line.split(sep);
 				if (arr.length > 2)
-				stations.add(new Station(arr[0], arr[1], arr[2].equals("true")));
+					stations.add(new Station(arr[0], arr[1], arr[2]
+							.equals("true")));
 			}
 			br.close();
+			if (saveFile) {
+				saveStations(stations);
+			}
 		} catch (Exception e) {
 			printErrorToLog(e);
 		}
@@ -100,14 +112,18 @@ public class LoadSaveStations {
 			printErrorToLog(e);
 		}
 	}
-	
+	//depreciated
+	/*
 	public static void saveStandardStations() {
 		ArrayList<Station> stations = new ArrayList<Station>();
 		stations.add(new Station("Patscherkofel", "11126", false));
-		stations.add(new Station("Wallberg", "http://80.157.135.194/wetter_uebersicht_tegernsee/windrichtung24.php", true));
+		stations.add(new Station(
+				"Wallberg",
+				"http://80.157.135.194/wetter_uebersicht_tegernsee/windrichtung24.php",
+				true));
 		saveStations(stations);
-	}
-	
+	}*/
+
 	static void printErrorToLog(Exception e) {
 		try {
 			if (!localDir.exists()) {

@@ -1,0 +1,13 @@
+Patscherkofel;11126;false
+Zugspitze;10961;false
+Wallberg;http://80.157.135.194/wetter_uebersicht_tegernsee/windrichtung24.php;true
+Brauneck;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bybewind.png;true
+Brauneck WR;http://data.snowreporter.net/windreporter/plugins/diagramme/station_1006/windrichtung.php?hours=3&kmh=0;true
+Blomberg WR;http://data.snowreporter.net/windreporter/plugins/diagramme/station_1004/windrichtung.php?hours=5&kmh=0;true
+Kampenwand;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bykwwind.png;true
+Herzogstand;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/byhswind.png;true
+ZugspitzeLWD;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/byzswind.png;true
+Seegrube;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/seegrube.png;true
+Schlick;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/schlickeralm.png;true
+Hohe Munde;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/hohemunde.png;true
+
