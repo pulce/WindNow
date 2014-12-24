@@ -1,5 +1,6 @@
 package com.windnow;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,7 +14,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,15 +50,18 @@ public class MainActivity extends ActionBarActivity {
 
 	private static final String VERSIONID = "0.1";
 	private StationListAdapter stAda;
+	private String sharedUrl;
 	public static final int DIALOG_NEW_STAT = -1;
+	public static final int DIALOG_SHARED_STAT = -2;
 	public static final int STATION = 1;
 	public static final int USER_PREF = 3;
 	public static final boolean DUMMY = false;
 	final ArrayList<Station> objects = new ArrayList<Station>();
 
 	static ArrayList<String> txt;
-	static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-	
+	static DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
+
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,7 +80,12 @@ public class MainActivity extends ActionBarActivity {
 							: new Intent(getApplicationContext(),
 									StationText.class);
 					sText.putExtra("txt", objects.get(position).getUrl());
-					sText.putExtra("name", objects.get(position).getName() + "\nDownloaded: " + sdf.format(objects.get(position).getDate()));
+					sText.putExtra(
+							"name",
+							objects.get(position).getName()
+									+ "\nDownloaded: "
+									+ sdf.format(objects.get(position)
+											.getDate()));
 					sText.putStringArrayListExtra("tabTxt",
 							objects.get(position).getTabTxt());
 					startActivityForResult(sText, STATION);
@@ -86,7 +94,6 @@ public class MainActivity extends ActionBarActivity {
 		});
 
 		listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -96,6 +103,14 @@ public class MainActivity extends ActionBarActivity {
 
 		});
 
+		Intent intent = getIntent();
+		String action = intent.getAction();
+		String type = intent.getType();
+
+		if (Intent.ACTION_SEND.equals(action) && type != null) {
+			sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
+			showDialog(DIALOG_NEW_STAT);
+		}
 	}
 
 	@Override
@@ -171,7 +186,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 			station.setDate(Calendar.getInstance().getTime());
 			return response;
-			
+
 		}
 
 		@Override
@@ -209,11 +224,14 @@ public class MainActivity extends ActionBarActivity {
 	protected void onPrepareDialog(final int id, Dialog dialog) {
 		final AlertDialog alertDialog = (AlertDialog) dialog;
 		switch (id) {
+		case DIALOG_SHARED_STAT:
 		case DIALOG_NEW_STAT:
 			final EditText stationName = (EditText) alertDialog
 					.findViewById(R.id.newStationName);
 			final EditText stationUrl = (EditText) alertDialog
 					.findViewById(R.id.newStationUrl);
+			if (id == DIALOG_SHARED_STAT)
+				stationUrl.setText(sharedUrl);
 			Button okButton = (Button) alertDialog
 					.findViewById(R.id.btn_confirm);
 			okButton.setOnClickListener(new View.OnClickListener() {
@@ -276,8 +294,8 @@ public class MainActivity extends ActionBarActivity {
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							MainActivity.this);
 					builder.setMessage("Really delete this station?")
-							.setPositiveButton("Yes", dialogClickListener)
-							.setNegativeButton("No", dialogClickListener)
+							.setPositiveButton(android.R.string.yes, dialogClickListener)
+							.setNegativeButton(android.R.string.no, dialogClickListener)
 							.show();
 					alertDialog.dismiss();
 				}
