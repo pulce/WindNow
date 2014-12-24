@@ -1,6 +1,8 @@
 package com.windnow;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
@@ -11,13 +13,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -55,7 +57,8 @@ public class MainActivity extends ActionBarActivity {
 	final ArrayList<Station> objects = new ArrayList<Station>();
 
 	static ArrayList<String> txt;
-
+	static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,13 +71,13 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view,
 					int position, long id) {
-				if (objects.get(position).isLoaded()) {
-					Intent sText = objects.get(position).isPic() ? new Intent(
+				if (objects.get(position).isvalued()) {
+					Intent sText = objects.get(position).getType() == Station.PIC ? new Intent(
 							getApplicationContext(), StationPic.class)
 							: new Intent(getApplicationContext(),
 									StationText.class);
 					sText.putExtra("txt", objects.get(position).getUrl());
-					sText.putExtra("name", objects.get(position).getName());
+					sText.putExtra("name", objects.get(position).getName() + "\nDownloaded: " + sdf.format(objects.get(position).getDate()));
 					sText.putStringArrayListExtra("tabTxt",
 							objects.get(position).getTabTxt());
 					startActivityForResult(sText, STATION);
@@ -161,17 +164,20 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		protected String doInBackground(String... urls) {
 			String response = "";
-			if (station.isPic()) {
+			if (station.getType() == Station.PIC) {
 				station.setTxt(DownloadWCStation.downloadPic(station.getUrl()));
 			} else {
 				station.setTabTxt(DownloadWCStation.downloadWC(station.getUrl()));
 			}
+			station.setDate(Calendar.getInstance().getTime());
 			return response;
+			
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
 			station.setLoaded(true);
+			station.setValued(true);
 			stAda.notifyDataSetChanged();
 		}
 
@@ -208,16 +214,13 @@ public class MainActivity extends ActionBarActivity {
 					.findViewById(R.id.newStationName);
 			final EditText stationUrl = (EditText) alertDialog
 					.findViewById(R.id.newStationUrl);
-			final CheckBox stationIsPic = (CheckBox) alertDialog
-					.findViewById(R.id.dialog_pic_station);
 			Button okButton = (Button) alertDialog
 					.findViewById(R.id.btn_confirm);
 			okButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Station newStation = new Station(stationName.getText()
-							.toString(), stationUrl.getText().toString(),
-							stationIsPic.isChecked());
+							.toString(), stationUrl.getText().toString());
 					objects.add(newStation);
 					stAda.notifyDataSetChanged();
 					LoadSaveStations.saveStations(objects);

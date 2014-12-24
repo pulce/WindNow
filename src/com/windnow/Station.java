@@ -1,6 +1,7 @@
 package com.windnow;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -28,16 +29,28 @@ import java.util.Locale;
 public class Station implements Comparable<Station>{
 	private String name;
 	private String url;
-	private boolean pic;
+	private int type;
+	private Date date;
 	private String txt;
 	private ArrayList<String> tabTxt;
 	private int position;
 	private boolean loaded = false;
+	private boolean valued = false;
 	
-	public Station(String name, String url, boolean pic) {
+	public static final int PIC = 1;
+	public static final int WC = 2;
+	
+	public Station(String name, String url) {
 		this.name = name;
 		this.url = url;
-		this.pic = pic;
+		if (!url.startsWith("http")) {
+			if (!url.startsWith("www.")) {
+				this.url = "www." + this.url;
+			}
+			this.url = "http://" + this.url;
+		}
+		if (url.contains("wetteronline") && url.contains("aktuelles-wetter")) this.type = WC;
+		else this.type = PIC;
 	}
 
 	public String getUrl() {
@@ -46,6 +59,14 @@ public class Station implements Comparable<Station>{
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public String getTxt() {
@@ -56,6 +77,14 @@ public class Station implements Comparable<Station>{
 		this.txt = txt;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public ArrayList<String> getTabTxt() {
 		return tabTxt;
 	}
@@ -64,15 +93,6 @@ public class Station implements Comparable<Station>{
 		this.tabTxt = tabTxt;
 	}
 
-	public boolean isPic() {
-		return pic;
-	}
-
-	public void setPic(boolean pic) {
-		this.pic = pic;
-	}
-	
-	
 	public String getName() {
 		return name;
 	}
@@ -89,7 +109,6 @@ public class Station implements Comparable<Station>{
 		this.position = position;
 	}
 
-	
 	public boolean isLoaded() {
 		return loaded;
 	}
@@ -97,7 +116,7 @@ public class Station implements Comparable<Station>{
 	public void setLoaded(boolean loaded) {
 		this.loaded = loaded;
 	}
-
+		
 	@Override
 	public int compareTo(Station o) {
 		if (this.url != null)
@@ -105,6 +124,14 @@ public class Station implements Comparable<Station>{
 					o.getUrl().toLowerCase(Locale.getDefault()));
 		else
 			throw new IllegalArgumentException();
+	}
+
+	public boolean isvalued() {
+		return valued;
+	}
+
+	public void setValued(boolean valued) {
+		this.valued = valued;
 	}
 
 }

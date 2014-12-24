@@ -15,10 +15,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.util.FloatMath;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * 
@@ -63,10 +63,11 @@ public class StationPic extends ActionBarActivity {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		setContentView(R.layout.activity_station_pic);
+		TextView tv = (TextView) findViewById(R.id.textViewPicName);
+		tv.setText(getIntent().getExtras().getString("name"));
 		imageDetail = (ImageView) findViewById(R.id.imageView1);
 		String filename = "pic"
 				+ getIntent().getExtras().getString("txt").hashCode();
-		Log.d("Load as:", filename);
 		Bitmap pic = null;
 		try {
 			FileInputStream is = this.openFileInput(filename);
@@ -83,7 +84,6 @@ public class StationPic extends ActionBarActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 
 				ImageView view = (ImageView) v;
-				System.out.println("matrix=" + savedMatrix.toString());
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
 				case MotionEvent.ACTION_DOWN:
 
@@ -122,6 +122,8 @@ public class StationPic extends ActionBarActivity {
 							float scale = newDist / oldDist;
 							matrix.postScale(scale, scale, midPoint.x,
 									midPoint.y);
+							matrix.postTranslate(event.getX() - startPoint.x,
+									event.getY() - startPoint.y); //new
 						}
 					}
 					break;

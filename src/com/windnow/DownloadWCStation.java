@@ -52,9 +52,7 @@ class DownloadWCStation {
 						.parse(input, "UTF-8", "http://www.wetteronline.de/");
 				input.close();
 			} else {
-				doc = Jsoup.connect(
-						"http://www.wetteronline.de/aktuelles-wetter?gid="
-								+ url).get();
+				doc = Jsoup.connect(url).get();
 			}
 			Elements tableElements = doc
 					.select("table[class=hourly]:has(th:contains(Spitze))");

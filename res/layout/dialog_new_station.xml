@@ -24,17 +24,10 @@
         android:singleLine='true' >
   </EditText>
 
-    <CheckBox
-        android:id="@+id/dialog_pic_station"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Single Picture?" />
-
     <RelativeLayout
         android:layout_width='match_parent'
-        android:layout_height='wrap_content' >
-        android:layout_marginTop="10dp"
+        android:layout_height='wrap_content' 
+        android:layout_marginTop="10dp">
         
         <Button
             android:id='@+id/btn_confirm'

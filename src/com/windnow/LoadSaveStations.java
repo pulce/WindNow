@@ -81,9 +81,8 @@ public class LoadSaveStations {
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] arr = line.split(sep);
-				if (arr.length > 2)
-					stations.add(new Station(arr[0], arr[1], arr[2]
-							.equals("true")));
+				if (arr.length > 1)
+					stations.add(new Station(arr[0], arr[1]));
 			}
 			br.close();
 			if (saveFile) {
@@ -103,8 +102,7 @@ public class LoadSaveStations {
 			FileOutputStream fos = new FileOutputStream(stationsFile);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 			for (Station station : stations) {
-				bw.write(station.getName() + sep + station.getUrl() + sep
-						+ station.isPic());
+				bw.write(station.getName() + sep + station.getUrl());
 				bw.newLine();
 			}
 			bw.close();
