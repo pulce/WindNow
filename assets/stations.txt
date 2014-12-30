@@ -1,8 +1,8 @@
 Patscherkofel;http://www.wetteronline.de/aktuelles-wetter?gid=11126
 Zugspitze;http://www.wetteronline.de/aktuelles-wetter?gid=10961
+Südtirol;http://www.provinz.bz.it/wetter/hoehenwindstationen.asp
 Wallberg;http://80.157.135.194/wetter_uebersicht_tegernsee/windrichtung24.php
 Brauneck;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bybewind.png
-Brauneck WR;http://data.snowreporter.net/windreporter/plugins/diagramme/station_1006/windrichtung.php?hours=3&kmh=0
 Blomberg WR;http://data.snowreporter.net/windreporter/plugins/diagramme/station_1004/windrichtung.php?hours=5&kmh=0
 Kampenwand;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bykwwind.png
 Herzogstand;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/byhswind.png

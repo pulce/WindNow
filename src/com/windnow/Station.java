@@ -39,6 +39,7 @@ public class Station implements Comparable<Station>{
 	
 	public static final int PIC = 1;
 	public static final int WC = 2;
+	public static final int BZ = 3;
 	
 	public Station(String name, String url) {
 		this.name = name;
@@ -50,6 +51,7 @@ public class Station implements Comparable<Station>{
 			this.url = "http://" + this.url;
 		}
 		if (url.contains("wetteronline") && url.contains("aktuelles-wetter")) this.type = WC;
+		else if (url.contains("provinz.bz.it") && url.contains("hoehenwindstationen")) this.type = BZ;
 		else this.type = PIC;
 	}
 

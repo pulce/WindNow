@@ -18,9 +18,9 @@ import android.content.res.AssetManager;
  * 
  * This Class is part of WindNow.
  * 
- * It will download text stations or pic stations from web
- * or, in case of a dummy, from assets. Must be handled as
- * as AsyncTask. That is done in MainActivity!
+ * It will download text stations or pic stations from web or, in case of a
+ * dummy, from assets. Must be handled as as AsyncTask. That is done in
+ * MainActivity!
  * 
  * @author Florian Hauser Copyright (C) 2014
  * 
@@ -39,6 +39,7 @@ import android.content.res.AssetManager;
  */
 class DownloadWCStation {
 	private static final int IO_BUFFER_SIZE = 4 * 1024;
+
 	public static ArrayList<String> downloadWC(String url) {
 		ArrayList<String> patschText = new ArrayList<String>();
 		try {
@@ -109,6 +110,85 @@ class DownloadWCStation {
 		return patschText;
 	}
 
+	public static ArrayList<String> downloadBZ(String url) {
+		ArrayList<String> patschText = new ArrayList<String>();
+		try {
+			Document doc;
+
+			if (MainActivity.DUMMY) {
+				return patschText;
+			}
+			doc = Jsoup.connect(url).get();
+
+			Elements tableElements = doc
+					.select("table[class=avalanches-stations]:contains(Messstationen)");
+
+			// Headers
+			patschText.add("Station, Höhe, Zeit&/Ri&/Wind&/Spitze");
+
+			// Rows
+			Elements tableRowElements = tableElements.select(":not(thead) tr");
+			outerloop: for (int i = 0; i < tableRowElements.size(); i++) {
+				Element row = tableRowElements.get(i);
+				Elements rowItems = row.select("th, td");
+				String line = "";
+				for (int j = 0; j < rowItems.size(); j++) {
+					if (j != 2 && j != 3) {
+						String el = rowItems.get(j).text();
+						if (j == 0 && el.contains("(")) {
+							line += toCamelCase(el.split("\\(")[0].trim())
+									+ "\n";
+							line += el.split("\\(")[1].replace(")", "").trim()
+									+ ", ";
+						} else if (j == 1) {
+							if (el.length() > 5) {
+								line += el.substring(el.length() - 5); // no
+																		// date,
+																		// just
+																		// time
+							} else {
+								continue outerloop;
+							}
+						} else
+							line += rowItems.get(j).text();
+						if (j > 4)
+							line += " km/h";
+						if (j != rowItems.size() - 1 && j != 0)
+							line += "&/";
+					}
+				}
+				patschText.add(line);
+			}
+		} catch (Exception e) {
+			LoadSaveStations.printErrorToLog(e);
+		}
+		return patschText;
+	}
+
+	public static String toCamelCase(String inputString) {
+		String result = "";
+		if (inputString.length() == 0) {
+			return result;
+		}
+		char firstChar = inputString.charAt(0);
+		char firstCharToUpperCase = Character.toUpperCase(firstChar);
+		result = result + firstCharToUpperCase;
+		for (int i = 1; i < inputString.length(); i++) {
+			char currentChar = inputString.charAt(i);
+			char previousChar = inputString.charAt(i - 1);
+			if (previousChar == ' ') {
+				char currentCharToUpperCase = Character
+						.toUpperCase(currentChar);
+				result = result + currentCharToUpperCase;
+			} else {
+				char currentCharToLowerCase = Character
+						.toLowerCase(currentChar);
+				result = result + currentCharToLowerCase;
+			}
+		}
+		return result;
+	}
+
 	@SuppressWarnings("static-access")
 	static String downloadPic(String url) {
 		String filename = "pic" + url.hashCode();
@@ -141,5 +221,5 @@ class DownloadWCStation {
 		}
 		return filename;
 	}
-	
+
 }

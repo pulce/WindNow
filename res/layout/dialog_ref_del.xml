@@ -9,7 +9,7 @@
         android:id="@+id/refresh"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Refresh Station"
+        android:text="@string/diag_refresh_station"
         android:singleLine='true' >
 
     </Button>
@@ -18,7 +18,7 @@
         android:id='@+id/delete'
         android:layout_width='match_parent'
         android:layout_height='wrap_content'
-        android:text="Delete Station"
+        android:text="@string/diag_delete_station"
         android:singleLine='true' >
     </Button>
 

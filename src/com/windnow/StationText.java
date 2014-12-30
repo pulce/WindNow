@@ -99,7 +99,7 @@ public class StationText extends ActionBarActivity {
 		TextView txv = new TextView(this);
 		txv.setLayoutParams(tvParams);
 		txv.setText(words[i]);
-		txv.setGravity(i == 0 ? Gravity.LEFT : Gravity.RIGHT);
+		txv.setGravity(i == 0 ? Gravity.LEFT : Gravity.LEFT);
 		tr.addView(txv, 0);
 		}
 		tl.addView(tr);

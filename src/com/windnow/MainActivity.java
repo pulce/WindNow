@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -181,6 +180,8 @@ public class MainActivity extends ActionBarActivity {
 			String response = "";
 			if (station.getType() == Station.PIC) {
 				station.setTxt(DownloadWCStation.downloadPic(station.getUrl()));
+			} else if (station.getType() == Station.BZ) {
+				station.setTabTxt(DownloadWCStation.downloadBZ(station.getUrl()));
 			} else {
 				station.setTabTxt(DownloadWCStation.downloadWC(station.getUrl()));
 			}
@@ -207,11 +208,11 @@ public class MainActivity extends ActionBarActivity {
 		switch (id) {
 		case DIALOG_NEW_STAT:
 			dialogview = inflater.inflate(R.layout.dialog_new_station, null);
-			dialogbuilder.setTitle("Create the new station:");
+			dialogbuilder.setTitle(R.string.create_the_new_station);
 			break;
 		default:
 			dialogview = inflater.inflate(R.layout.dialog_ref_del, null);
-			dialogbuilder.setTitle("What do you want to do?");
+			dialogbuilder.setTitle(R.string.what_to_do);
 			break;
 		}
 		dialogbuilder.setView(dialogview);
@@ -230,7 +231,7 @@ public class MainActivity extends ActionBarActivity {
 					.findViewById(R.id.newStationName);
 			final EditText stationUrl = (EditText) alertDialog
 					.findViewById(R.id.newStationUrl);
-			if (id == DIALOG_SHARED_STAT)
+			//if (id == DIALOG_SHARED_STAT)
 				stationUrl.setText(sharedUrl);
 			Button okButton = (Button) alertDialog
 					.findViewById(R.id.btn_confirm);
@@ -293,7 +294,7 @@ public class MainActivity extends ActionBarActivity {
 					};
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							MainActivity.this);
-					builder.setMessage("Really delete this station?")
+					builder.setMessage(R.string.really_delete)
 							.setPositiveButton(android.R.string.yes, dialogClickListener)
 							.setNegativeButton(android.R.string.no, dialogClickListener)
 							.show();

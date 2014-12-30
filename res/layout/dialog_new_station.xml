@@ -1,48 +1,78 @@
 <?xml version='1.0' encoding='utf-8'?>
-<LinearLayout xmlns:android='http://schemas.android.com/apk/res/android'
-    android:layout_width='fill_parent'
-    android:layout_height='fill_parent'
-    android:orientation='vertical'
-    android:padding='10sp' >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <EditText
-        android:id='@+id/newStationName'
-        android:layout_width='fill_parent'
-        android:layout_height='wrap_content'
-        android:hint='@string/dialog_uname'
-        android:singleLine='true' >
+        android:id="@+id/newStationName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="15dip"
+        android:hint="@string/dialog_uname"
+        android:singleLine="true" >
 
         <requestFocus />
     </EditText>
 
     <EditText
-        android:id='@+id/newStationUrl'
-        android:layout_width='match_parent'
-        android:layout_height='wrap_content'
-        android:layout_marginTop="10dp"
-         android:hint='@string/dialog_url'
-        android:singleLine='true' >
-  </EditText>
+        android:id="@+id/newStationUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dip"
+        android:layout_marginTop="5dip"
+        android:hint="@string/dialog_url"
+        android:singleLine="true" >
+    </EditText>
 
     <RelativeLayout
-        android:layout_width='match_parent'
-        android:layout_height='wrap_content' 
-        android:layout_marginTop="10dp">
-        
-        <Button
-            android:id='@+id/btn_confirm'
-            android:layout_width='120dp'
-            android:layout_height='wrap_content'
-            android:text="OK" />
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="0dip"
+        android:layout_marginRight="0dip" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="0dip"
+            android:background="@android:color/darker_gray" />
+
+        <View
+            android:id="@+id/ViewColorPickerHelper"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dip"
+            android:layout_marginTop="0dip"
+            android:background="@android:color/darker_gray" />
 
         <Button
-            android:id='@+id/btn_cancel'
-            android:layout_width='120dp'
-            android:layout_height='wrap_content'
-            android:layout_alignParentTop='true'
-            android:layout_marginLeft='10dp'
-            android:layout_toRightOf='@+id/btn_confirm'
-            android:text="Cancel" />
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/ViewColorPickerHelper"
+            android:background="@drawable/selector_transparent_button"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/ViewColorPickerHelper"
+            android:background="@drawable/selector_transparent_button"
+            android:text="@android:string/ok" />
     </RelativeLayout>
 
 </LinearLayout>

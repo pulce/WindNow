@@ -110,17 +110,6 @@ public class LoadSaveStations {
 			printErrorToLog(e);
 		}
 	}
-	//depreciated
-	/*
-	public static void saveStandardStations() {
-		ArrayList<Station> stations = new ArrayList<Station>();
-		stations.add(new Station("Patscherkofel", "11126", false));
-		stations.add(new Station(
-				"Wallberg",
-				"http://80.157.135.194/wetter_uebersicht_tegernsee/windrichtung24.php",
-				true));
-		saveStations(stations);
-	}*/
 
 	static void printErrorToLog(Exception e) {
 		try {
