@@ -39,7 +39,7 @@
 
                 <data android:mimeType="image/*" />
             </intent-filter>
-            </activity>
+        </activity>
         <activity
             android:name=".StationText"
             android:label="@string/title_activity_station_text" >
@@ -49,8 +49,12 @@
             android:label="@string/title_activity_station_pic" >
         </activity>
         <activity
-            android:name="com.windnow.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help" >
         </activity>
     </application>
 

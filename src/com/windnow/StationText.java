@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -45,10 +44,10 @@ public class StationText extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		setContentView(R.layout.activity_station_text);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		setContentView(R.layout.activity_station_text);
 		TextView tv = (TextView) findViewById(R.id.textView1);
 		tv.setText(getIntent().getExtras().getString("name"));
 		ArrayList<String> tabTxt = getIntent().getStringArrayListExtra("tabTxt");
@@ -58,18 +57,9 @@ public class StationText extends ActionBarActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.station_text, menu);
-		return true;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Intent returnIntent = new Intent();
-			returnIntent.putExtra("result", "justADummy");
-			setResult(1, returnIntent);
 			Intent intent = new Intent(this, MainActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Resume saved
 																// State!

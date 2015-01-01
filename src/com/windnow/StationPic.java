@@ -6,7 +6,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -59,10 +58,10 @@ public class StationPic extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		setContentView(R.layout.activity_station_pic);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		setContentView(R.layout.activity_station_pic);
 		TextView tv = (TextView) findViewById(R.id.textViewPicName);
 		tv.setText(getIntent().getExtras().getString("name"));
 		imageDetail = (ImageView) findViewById(R.id.imageView1);
@@ -151,19 +150,9 @@ public class StationPic extends ActionBarActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.station_pic, menu);
-		return true;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Intent returnIntent = new Intent();
-			returnIntent.putExtra("result", "justADummy");
-			setResult(1, returnIntent);
 			Intent intent = new Intent(this, MainActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Resume saved
 																// State!

@@ -1,9 +1,9 @@
 package com.windnow;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -52,13 +52,10 @@ public class MainActivity extends ActionBarActivity {
 	private String sharedUrl;
 	public static final int DIALOG_NEW_STAT = -1;
 	public static final int DIALOG_SHARED_STAT = -2;
-	public static final int STATION = 1;
-	public static final int USER_PREF = 3;
 	public static final boolean DUMMY = false;
 	final ArrayList<Station> objects = new ArrayList<Station>();
 
 	static ArrayList<String> txt;
-	static DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -79,15 +76,11 @@ public class MainActivity extends ActionBarActivity {
 							: new Intent(getApplicationContext(),
 									StationText.class);
 					sText.putExtra("txt", objects.get(position).getUrl());
-					sText.putExtra(
-							"name",
-							objects.get(position).getName()
-									+ "\nDownloaded: "
-									+ sdf.format(objects.get(position)
-											.getDate()));
+					sText.putExtra("name", objects.get(position).getName()
+							+ "\n" + objects.get(position).getDateString());
 					sText.putStringArrayListExtra("tabTxt",
 							objects.get(position).getTabTxt());
-					startActivityForResult(sText, STATION);
+					startActivity(sText);
 				}
 			}
 		});
@@ -123,9 +116,12 @@ public class MainActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
-			Intent userPref = new Intent(getApplicationContext(),
-					SettingsActivity.class);
-			startActivityForResult(userPref, USER_PREF);
+			startActivity(new Intent(getApplicationContext(),
+					SettingsActivity.class));
+			break;
+		case R.id.action_help:
+			startActivity(new Intent(getApplicationContext(),
+					HelpActivity.class));
 			break;
 		case R.id.action_about:
 			AboutDialog.makeDialog(this, VERSIONID);
@@ -152,18 +148,6 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Return here with result from activity
-	 */
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-		case STATION:
-			break;
-		}
-	}
-
-	/**
 	 * 
 	 * AsyncTask to download the content...
 	 *
@@ -179,7 +163,7 @@ public class MainActivity extends ActionBarActivity {
 		protected String doInBackground(String... urls) {
 			String response = "";
 			if (station.getType() == Station.PIC) {
-				station.setTxt(DownloadWCStation.downloadPic(station.getUrl()));
+				DownloadWCStation.downloadPic(station.getUrl());
 			} else if (station.getType() == Station.BZ) {
 				station.setTabTxt(DownloadWCStation.downloadBZ(station.getUrl()));
 			} else {
@@ -194,9 +178,9 @@ public class MainActivity extends ActionBarActivity {
 		protected void onPostExecute(String result) {
 			station.setLoaded(true);
 			station.setValued(true);
+			station.setDate(new Date());
 			stAda.notifyDataSetChanged();
 		}
-
 	}
 
 	@Override
@@ -231,8 +215,8 @@ public class MainActivity extends ActionBarActivity {
 					.findViewById(R.id.newStationName);
 			final EditText stationUrl = (EditText) alertDialog
 					.findViewById(R.id.newStationUrl);
-			//if (id == DIALOG_SHARED_STAT)
-				stationUrl.setText(sharedUrl);
+			// if (id == DIALOG_SHARED_STAT)
+			stationUrl.setText(sharedUrl);
 			Button okButton = (Button) alertDialog
 					.findViewById(R.id.btn_confirm);
 			okButton.setOnClickListener(new View.OnClickListener() {
@@ -295,9 +279,10 @@ public class MainActivity extends ActionBarActivity {
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							MainActivity.this);
 					builder.setMessage(R.string.really_delete)
-							.setPositiveButton(android.R.string.yes, dialogClickListener)
-							.setNegativeButton(android.R.string.no, dialogClickListener)
-							.show();
+							.setPositiveButton(android.R.string.yes,
+									dialogClickListener)
+							.setNegativeButton(android.R.string.no,
+									dialogClickListener).show();
 					alertDialog.dismiss();
 				}
 			});

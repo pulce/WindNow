@@ -68,26 +68,32 @@ public class StationListAdapter extends ArrayAdapter<Station> {
 		}
 		final Station o = objects.get(position);
 
+		int heig = 0;
 		if (o != null) {
 
 			TextView header = (TextView) v.findViewById(R.id.secondLine);
 			header.setText(o.getName());
+			heig += header.getLineHeight();
+			
+			TextView loaded = (TextView) v.findViewById(R.id.lowerLine);
+			loaded.setText(o.getDateString());
+			heig += loaded.getLineHeight();
 
 		}
 
 		ImageView view = (ImageView) v.findViewById(R.id.sockIcon);
 		if (o.isLoaded())
-			view.setImageDrawable(scaleImage(view, colSock));
+			view.setImageDrawable(scaleImage(view, colSock, heig + 15));
 		else
-			view.setImageDrawable(scaleImage(view, greySock));
+			view.setImageDrawable(scaleImage(view, greySock, heig + 15));
 
 		return v;
 	}
 
-	private BitmapDrawable scaleImage(View v, Bitmap bitmap) {
+	private BitmapDrawable scaleImage(View v, Bitmap bitmap, int size) {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
-		int bounding = dpToPx(100);
+		int bounding = dpToPx(size);
 		float xScale = ((float) bounding) / width;
 		float yScale = ((float) bounding) / height;
 		float scale = (xScale <= yScale) ? xScale : yScale;

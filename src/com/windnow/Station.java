@@ -1,5 +1,8 @@
 package com.windnow;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -26,21 +29,22 @@ import java.util.Locale;
  *         along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Station implements Comparable<Station>{
+public class Station implements Comparable<Station> {
 	private String name;
 	private String url;
 	private int type;
 	private Date date;
-	private String txt;
 	private ArrayList<String> tabTxt;
 	private int position;
 	private boolean loaded = false;
 	private boolean valued = false;
-	
+
 	public static final int PIC = 1;
 	public static final int WC = 2;
 	public static final int BZ = 3;
-	
+
+	private static DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
+
 	public Station(String name, String url) {
 		this.name = name;
 		this.url = url;
@@ -50,9 +54,24 @@ public class Station implements Comparable<Station>{
 			}
 			this.url = "http://" + this.url;
 		}
-		if (url.contains("wetteronline") && url.contains("aktuelles-wetter")) this.type = WC;
-		else if (url.contains("provinz.bz.it") && url.contains("hoehenwindstationen")) this.type = BZ;
-		else this.type = PIC;
+		if (url.contains("wetteronline") && url.contains("aktuelles-wetter"))
+			this.type = WC;
+		else if (url.contains("provinz.bz.it")
+				&& url.contains("hoehenwindstationen"))
+			this.type = BZ;
+		else {
+			this.type = PIC;
+		}
+		// Check loaded
+		String filename = "pic" + this.url.hashCode();
+		File file = OnlyContext.getContext().getFileStreamPath(filename);
+		if (file != null && file.exists()) {
+			this.date = new Date(file.lastModified());
+			if (this.type != PIC) {
+				this.tabTxt = DownloadWCStation.loadArray(url);
+			}
+			this.valued = true;
+		} 
 	}
 
 	public String getUrl() {
@@ -62,25 +81,16 @@ public class Station implements Comparable<Station>{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	public int getType() {
 		return type;
 	}
 
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public String getTxt() {
-		return txt;
-	}
-
-	public void setTxt(String txt) {
-		this.txt = txt;
-	}
-
-	public Date getDate() {
-		return date;
+	public String getDateString() {
+		if (this.date == null) {
+			return OnlyContext.getContext().getString(R.string.not_loaded);
+		}
+		return OnlyContext.getContext().getString(R.string.downloaded_at) + sdf.format(this.date);
 	}
 
 	public void setDate(Date date) {
@@ -118,7 +128,7 @@ public class Station implements Comparable<Station>{
 	public void setLoaded(boolean loaded) {
 		this.loaded = loaded;
 	}
-		
+
 	@Override
 	public int compareTo(Station o) {
 		if (this.url != null)

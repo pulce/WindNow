@@ -16,8 +16,7 @@
     <string name="authors_note">        Contact: pulce@gmx.at \n
         Copyright 2014 \n
         by Florian Hauser</string>
-    <string name="legal_notice">
-    Dependencies:\n
+    <string name="legal_notice">    Dependencies:\n
     jsoup - http://jsoup.org/ \n
     \n
     License: \n  
@@ -33,6 +32,20 @@
     
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.</string>
+    <string name="help_string">WindNow\n\n
+            This app manages wind (or weather) stations with a focus on low traffic consumtion.
+            One station can only be\n
+            &#8226; a single image with a static url.\n
+            &#8226; a station provided by wetteronline.com as \"aktuelles Wetter\".\n
+            &#8226; the information provided by http://www.provinz.bz.it/wetter/hoehenwindstationen.asp.\n\n
+ 
+To load (or refresh) data for a station either refresh all stations from the settings menu, or long-click 
+a station in the list for a selective refresh. Deleting a station is possible by long-clicking.\n\n
+            
+There are three ways to create new stations:\n
+1. Specifying url and name in the \"new station\" dialog in settings.\n
+2. Sharing an image or a valid url in an android browser.\n
+3. Modifying the (self-explanatory) \"stations\" file in the \"WindNow\" directory on your sd-card.\n\n</string>
     <string name="pref_dialog_title_dir">Dir for stations file relative to /sdcard/</string>
     <string name="pref_title_dir">Select directory for stations file</string>
     <string name="create_the_new_station">Create the new station:</string>
@@ -40,5 +53,9 @@
     <string name="really_delete">Really delete this station?</string>
     <string name="diag_refresh_station">Refresh Station</string>
     <string name="diag_delete_station">Delete Station</string>
-    
+    <string name="not_loaded">Not loaded</string>
+    <string name="downloaded_at">"Downloaded: "</string>
+    <string name="title_activity_help">Help</string>
+    <string name="action_help">Help</string>
+
 </resources>

@@ -2,8 +2,13 @@ package com.windnow;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -104,7 +109,8 @@ class DownloadWCStation {
 				}
 				patschText.add(line);
 			}
-		} catch (Exception e) {
+			saveArray(url, patschText);
+		} catch (IOException e) {
 			LoadSaveStations.printErrorToLog(e);
 		}
 		return patschText;
@@ -159,10 +165,39 @@ class DownloadWCStation {
 				}
 				patschText.add(line);
 			}
+			saveArray(url, patschText);
 		} catch (Exception e) {
 			LoadSaveStations.printErrorToLog(e);
 		}
 		return patschText;
+	}
+
+	private static void saveArray(String url, ArrayList<String> ar)
+			throws FileNotFoundException {
+		String filename = "pic" + url.hashCode();
+		PrintWriter pw = null;
+		pw = new PrintWriter(OnlyContext.getContext().openFileOutput(filename,
+				OnlyContext.MODE_PRIVATE));
+		for (String line : ar)
+			pw.println(line);
+		pw.close();
+	}
+	
+	public static ArrayList<String> loadArray(String url) {
+		ArrayList<String> ar = new ArrayList<String>();
+		String filename = "pic" + url.hashCode();
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(OnlyContext.getContext().getFileStreamPath(filename)));
+			String line;
+			while ((line = br.readLine()) != null) {
+				ar.add(line);
+			}
+			br.close();
+		} catch (Exception e) {
+			LoadSaveStations.printErrorToLog(e);
+		}
+		return ar;
 	}
 
 	public static String toCamelCase(String inputString) {
@@ -189,10 +224,8 @@ class DownloadWCStation {
 		return result;
 	}
 
-	@SuppressWarnings("static-access")
-	static String downloadPic(String url) {
+	static void downloadPic(String url) {
 		String filename = "pic" + url.hashCode();
-		;
 		try {
 			InputStream input;
 			OutputStream out;
@@ -206,7 +239,7 @@ class DownloadWCStation {
 			}
 			out = new BufferedOutputStream(OnlyContext.getContext()
 					.openFileOutput(filename,
-							OnlyContext.getContext().MODE_PRIVATE),
+							OnlyContext.MODE_PRIVATE),
 					IO_BUFFER_SIZE);
 			byte[] b = new byte[IO_BUFFER_SIZE];
 			int read;
@@ -219,7 +252,6 @@ class DownloadWCStation {
 		} catch (Exception e) {
 			LoadSaveStations.printErrorToLog(e);
 		}
-		return filename;
 	}
 
 }
