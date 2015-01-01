@@ -32,6 +32,7 @@ import java.util.Locale;
 public class Station implements Comparable<Station> {
 	private String name;
 	private String url;
+	private String secLine = OnlyContext.getContext().getString(R.string.not_loaded);
 	private int type;
 	private Date date;
 	private ArrayList<String> tabTxt;
@@ -43,7 +44,7 @@ public class Station implements Comparable<Station> {
 	public static final int WC = 2;
 	public static final int BZ = 3;
 
-	private static DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
+	public static DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
 
 	public Station(String name, String url) {
 		this.name = name;
@@ -66,7 +67,7 @@ public class Station implements Comparable<Station> {
 		String filename = "pic" + this.url.hashCode();
 		File file = OnlyContext.getContext().getFileStreamPath(filename);
 		if (file != null && file.exists()) {
-			this.date = new Date(file.lastModified());
+			setDate(new Date(file.lastModified()));
 			if (this.type != PIC) {
 				this.tabTxt = DownloadWCStation.loadArray(url);
 			}
@@ -82,19 +83,26 @@ public class Station implements Comparable<Station> {
 		this.url = url;
 	}
 
+	public String getSecLine() {
+		return secLine;
+	}
+
+	public void setSecLine(String secLine) {
+		this.secLine = secLine;
+	}
+
 	public int getType() {
 		return type;
 	}
 
-	public String getDateString() {
-		if (this.date == null) {
-			return OnlyContext.getContext().getString(R.string.not_loaded);
-		}
-		return OnlyContext.getContext().getString(R.string.downloaded_at) + sdf.format(this.date);
-	}
-
+	//SetDate means successful download or old data available!
 	public void setDate(Date date) {
 		this.date = date;
+		this.secLine = OnlyContext.getContext().getString(R.string.downloaded_at) + sdf.format(this.date);
+	}
+
+	public Date getDate() {
+		return date;
 	}
 
 	public ArrayList<String> getTabTxt() {

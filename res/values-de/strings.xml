@@ -58,5 +58,7 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="downloaded_at">"Geladen: "</string>
     <string name="title_activity_help">Hilfe</string>
     <string name="action_help">Hilfe</string>
+    <string name="downloading">Download gestartet</string>
+    <string name="download_error">Fehler beim Download</string>
     
 </resources>

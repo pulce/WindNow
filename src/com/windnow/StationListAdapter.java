@@ -76,7 +76,7 @@ public class StationListAdapter extends ArrayAdapter<Station> {
 			heig += header.getLineHeight();
 			
 			TextView loaded = (TextView) v.findViewById(R.id.lowerLine);
-			loaded.setText(o.getDateString());
+			loaded.setText(o.getSecLine());
 			heig += loaded.getLineHeight();
 
 		}

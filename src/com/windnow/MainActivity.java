@@ -2,8 +2,6 @@ package com.windnow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -77,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
 									StationText.class);
 					sText.putExtra("txt", objects.get(position).getUrl());
 					sText.putExtra("name", objects.get(position).getName()
-							+ "\n" + objects.get(position).getDateString());
+							+ "\n" + getString(R.string.downloaded_at) + Station.sdf.format(objects.get(position).getDate()));
 					sText.putStringArrayListExtra("tabTxt",
 							objects.get(position).getTabTxt());
 					startActivity(sText);
@@ -131,14 +129,7 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		case R.id.action_refresh:
 			for (Station st : objects) {
-				st.setLoaded(false);
-				stAda.notifyDataSetChanged();
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-					new DownloadStation(st).executeOnExecutor(
-							AsyncTask.THREAD_POOL_EXECUTOR, st.getUrl());
-				} else {
-					new DownloadStation(st).execute(st.getUrl());
-				}
+				initiateDl(st);
 			}
 			break;
 		default:
@@ -147,6 +138,18 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void initiateDl(Station st) {
+		st.setLoaded(false);
+		st.setSecLine(getString(R.string.downloading));
+		stAda.notifyDataSetChanged();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			new DownloadStation(st).executeOnExecutor(
+					AsyncTask.THREAD_POOL_EXECUTOR, st.getUrl());
+		} else {
+			new DownloadStation(st).execute(st.getUrl());
+		}
+	}
+	
 	/**
 	 * 
 	 * AsyncTask to download the content...
@@ -161,24 +164,28 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		protected String doInBackground(String... urls) {
-			String response = "";
+			Boolean allGood;
 			if (station.getType() == Station.PIC) {
-				DownloadWCStation.downloadPic(station.getUrl());
+				allGood = DownloadWCStation.downloadPic(station);
 			} else if (station.getType() == Station.BZ) {
-				station.setTabTxt(DownloadWCStation.downloadBZ(station.getUrl()));
+				allGood = DownloadWCStation.downloadBZ(station);
 			} else {
-				station.setTabTxt(DownloadWCStation.downloadWC(station.getUrl()));
+				allGood = DownloadWCStation.downloadWC(station);
 			}
-			station.setDate(Calendar.getInstance().getTime());
-			return response;
+			
+			if (allGood) {
+				station.setLoaded(true);
+				station.setValued(true);
+				station.setDate(Calendar.getInstance().getTime());
+			} else {
+				station.setSecLine(getString(R.string.download_error));
+			}
+			return "";
 
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			station.setLoaded(true);
-			station.setValued(true);
-			station.setDate(new Date());
 			stAda.notifyDataSetChanged();
 		}
 	}
@@ -246,15 +253,7 @@ public class MainActivity extends ActionBarActivity {
 			refButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					objects.get(id).setLoaded(false);
-					stAda.notifyDataSetChanged();
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-						new DownloadStation(objects.get(id)).executeOnExecutor(
-								AsyncTask.THREAD_POOL_EXECUTOR, objects.get(id)
-										.getUrl());
-					} else {
-						new DownloadStation(objects.get(id)).execute("test");
-					}
+					initiateDl(objects.get(id));
 					alertDialog.dismiss();
 				}
 			});

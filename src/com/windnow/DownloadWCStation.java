@@ -45,7 +45,7 @@ import android.content.res.AssetManager;
 class DownloadWCStation {
 	private static final int IO_BUFFER_SIZE = 4 * 1024;
 
-	public static ArrayList<String> downloadWC(String url) {
+	public static boolean downloadWC(Station st) {
 		ArrayList<String> patschText = new ArrayList<String>();
 		try {
 			Document doc;
@@ -58,7 +58,7 @@ class DownloadWCStation {
 						.parse(input, "UTF-8", "http://www.wetteronline.de/");
 				input.close();
 			} else {
-				doc = Jsoup.connect(url).get();
+				doc = Jsoup.connect(st.getUrl()).get();
 			}
 			Elements tableElements = doc
 					.select("table[class=hourly]:has(th:contains(Spitze))");
@@ -109,22 +109,24 @@ class DownloadWCStation {
 				}
 				patschText.add(line);
 			}
-			saveArray(url, patschText);
+			saveArray(st.getUrl(), patschText);
 		} catch (IOException e) {
 			LoadSaveStations.printErrorToLog(e);
+			return false;
 		}
-		return patschText;
+		st.setTabTxt(patschText);
+		return true;
 	}
 
-	public static ArrayList<String> downloadBZ(String url) {
+	public static boolean downloadBZ(Station st) {
 		ArrayList<String> patschText = new ArrayList<String>();
 		try {
 			Document doc;
 
 			if (MainActivity.DUMMY) {
-				return patschText;
+				return true;
 			}
-			doc = Jsoup.connect(url).get();
+			doc = Jsoup.connect(st.getUrl()).get();
 
 			Elements tableElements = doc
 					.select("table[class=avalanches-stations]:contains(Messstationen)");
@@ -165,11 +167,13 @@ class DownloadWCStation {
 				}
 				patschText.add(line);
 			}
-			saveArray(url, patschText);
+			saveArray(st.getUrl(), patschText);
 		} catch (Exception e) {
 			LoadSaveStations.printErrorToLog(e);
+			return false;
 		}
-		return patschText;
+		st.setTabTxt(patschText);
+		return true;
 	}
 
 	private static void saveArray(String url, ArrayList<String> ar)
@@ -224,8 +228,8 @@ class DownloadWCStation {
 		return result;
 	}
 
-	static void downloadPic(String url) {
-		String filename = "pic" + url.hashCode();
+	static boolean downloadPic(Station st) {
+		String filename = "pic" + st.getUrl().hashCode();
 		try {
 			InputStream input;
 			OutputStream out;
@@ -234,7 +238,7 @@ class DownloadWCStation {
 						.getAssets();
 				input = assetManager.open("windrichtung.png");
 			} else {
-				input = new BufferedInputStream(new URL(url).openStream(),
+				input = new BufferedInputStream(new URL(st.getUrl()).openStream(),
 						IO_BUFFER_SIZE);
 			}
 			out = new BufferedOutputStream(OnlyContext.getContext()
@@ -251,7 +255,9 @@ class DownloadWCStation {
 
 		} catch (Exception e) {
 			LoadSaveStations.printErrorToLog(e);
+			return false;
 		}
+		return true;
 	}
 
 }

@@ -116,11 +116,18 @@ public class LoadSaveStations {
 			if (!localDir.exists()) {
 				localDir.mkdirs();
 			}
+			boolean append = false;
+			SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+			if (fmt.format(new Date(errorLogFile.lastModified())).equals(fmt.format(new Date()))) {
+				append = true;
+			}
 			String line = Arrays.toString(e.getStackTrace());
-			FileOutputStream fos = new FileOutputStream(errorLogFile);
+			FileOutputStream fos = new FileOutputStream(errorLogFile, append);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 			bw.write(sdf.format(new Date()) + "-------------");
+			bw.newLine();
+			bw.write(e.toString());
 			bw.newLine();
 			bw.write(line);
 			bw.newLine();
