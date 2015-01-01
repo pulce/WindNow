@@ -151,9 +151,9 @@ public class MainActivity extends ActionBarActivity {
 		stAda.notifyDataSetChanged();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			new DownloadStation(st).executeOnExecutor(
-					AsyncTask.THREAD_POOL_EXECUTOR, st.getUrl());
+					AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
-			new DownloadStation(st).execute(st.getUrl());
+			new DownloadStation(st).execute();
 		}
 	}
 
@@ -162,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
 	 * AsyncTask to download the content...
 	 *
 	 */
-	private class DownloadStation extends AsyncTask<String, Integer, String> {
+	private class DownloadStation extends AsyncTask<Void, Integer, Void> {
 		private Station station;
 
 		private DownloadStation(Station station) {
@@ -170,7 +170,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 
 		@Override
-		protected String doInBackground(String... urls) {
+		protected Void doInBackground(Void... v) {
 			try {
 				if (station.getType() == Station.PIC) {
 					DownloadStations.downloadPic(station);
@@ -186,12 +186,11 @@ public class MainActivity extends ActionBarActivity {
 				station.setSecLine(getString(R.string.download_error));
 				LoadSaveOps.printErrorToLog(e);
 			}
-			return "";
-
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Void v) {
 			stAda.notifyDataSetChanged();
 		}
 	}
