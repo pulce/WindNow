@@ -69,7 +69,7 @@ public class Station implements Comparable<Station> {
 		if (file != null && file.exists()) {
 			setDate(new Date(file.lastModified()));
 			if (this.type != PIC) {
-				this.tabTxt = DownloadWCStation.loadArray(url);
+				this.tabTxt = DownloadStations.loadArray(url);
 			}
 			this.valued = true;
 		} 

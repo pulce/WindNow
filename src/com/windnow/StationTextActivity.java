@@ -37,7 +37,7 @@ import android.widget.TableLayout.LayoutParams;
  *         along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class StationText extends ActionBarActivity {
+public class StationTextActivity extends ActionBarActivity {
 
 	@SuppressLint("NewApi")
 

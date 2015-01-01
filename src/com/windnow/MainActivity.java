@@ -1,7 +1,9 @@
 package com.windnow;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -45,7 +47,7 @@ import android.widget.ListView;
 @SuppressLint({ "InflateParams", "NewApi" })
 public class MainActivity extends ActionBarActivity {
 
-	private static final String VERSIONID = "0.1";
+	private static final String VERSIONID = "1.0.0";
 	private StationListAdapter stAda;
 	private String sharedUrl;
 	public static final int DIALOG_NEW_STAT = -1;
@@ -60,7 +62,7 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		objects.addAll(LoadSaveStations.loadStations());
+		objects.addAll(LoadSaveOps.loadStations());
 		final ListView listview = (ListView) findViewById(R.id.listview);
 		stAda = new StationListAdapter(this, R.layout.main_list_item, objects);
 		listview.setAdapter(stAda);
@@ -70,12 +72,17 @@ public class MainActivity extends ActionBarActivity {
 					int position, long id) {
 				if (objects.get(position).isvalued()) {
 					Intent sText = objects.get(position).getType() == Station.PIC ? new Intent(
-							getApplicationContext(), StationPic.class)
+							getApplicationContext(), StationPicActivity.class)
 							: new Intent(getApplicationContext(),
-									StationText.class);
+									StationTextActivity.class);
 					sText.putExtra("txt", objects.get(position).getUrl());
-					sText.putExtra("name", objects.get(position).getName()
-							+ "\n" + getString(R.string.downloaded_at) + Station.sdf.format(objects.get(position).getDate()));
+					sText.putExtra(
+							"name",
+							objects.get(position).getName()
+									+ "\n"
+									+ getString(R.string.downloaded_at)
+									+ Station.sdf.format(objects.get(position)
+											.getDate()));
 					sText.putStringArrayListExtra("tabTxt",
 							objects.get(position).getTabTxt());
 					startActivity(sText);
@@ -149,7 +156,7 @@ public class MainActivity extends ActionBarActivity {
 			new DownloadStation(st).execute(st.getUrl());
 		}
 	}
-	
+
 	/**
 	 * 
 	 * AsyncTask to download the content...
@@ -164,21 +171,20 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		protected String doInBackground(String... urls) {
-			Boolean allGood;
-			if (station.getType() == Station.PIC) {
-				allGood = DownloadWCStation.downloadPic(station);
-			} else if (station.getType() == Station.BZ) {
-				allGood = DownloadWCStation.downloadBZ(station);
-			} else {
-				allGood = DownloadWCStation.downloadWC(station);
-			}
-			
-			if (allGood) {
+			try {
+				if (station.getType() == Station.PIC) {
+					DownloadStations.downloadPic(station);
+				} else if (station.getType() == Station.BZ) {
+					DownloadStations.downloadBZ(station);
+				} else {
+					DownloadStations.downloadWC(station);
+				}
 				station.setLoaded(true);
 				station.setValued(true);
 				station.setDate(Calendar.getInstance().getTime());
-			} else {
+			} catch (IOException e) {
 				station.setSecLine(getString(R.string.download_error));
+				LoadSaveOps.printErrorToLog(e);
 			}
 			return "";
 
@@ -233,7 +239,7 @@ public class MainActivity extends ActionBarActivity {
 							.toString(), stationUrl.getText().toString());
 					objects.add(newStation);
 					stAda.notifyDataSetChanged();
-					LoadSaveStations.saveStations(objects);
+					LoadSaveOps.saveStations(objects);
 					alertDialog.dismiss();
 				}
 			});
@@ -267,7 +273,7 @@ public class MainActivity extends ActionBarActivity {
 							switch (which) {
 							case DialogInterface.BUTTON_POSITIVE:
 								objects.remove(id);
-								LoadSaveStations.saveStations(objects);
+								LoadSaveOps.saveStations(objects);
 								stAda.notifyDataSetChanged();
 								break;
 							case DialogInterface.BUTTON_NEGATIVE:

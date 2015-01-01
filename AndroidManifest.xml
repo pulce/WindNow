@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.windnow"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -41,11 +41,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".StationText"
+            android:name=".StationTextActivity"
             android:label="@string/title_activity_station_text" >
         </activity>
         <activity
-            android:name=".StationPic"
+            android:name=".StationPicActivity"
             android:label="@string/title_activity_station_pic" >
         </activity>
         <activity

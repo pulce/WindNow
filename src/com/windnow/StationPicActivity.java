@@ -1,6 +1,7 @@
 package com.windnow;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
@@ -41,7 +42,7 @@ import android.widget.TextView;
  *         along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class StationPic extends ActionBarActivity {
+public class StationPicActivity extends ActionBarActivity {
 
 	private ImageView imageDetail;
 	private Matrix matrix = new Matrix();
@@ -72,8 +73,8 @@ public class StationPic extends ActionBarActivity {
 			FileInputStream is = this.openFileInput(filename);
 			pic = BitmapFactory.decodeStream(is);
 			is.close();
-		} catch (Exception e) {
-			LoadSaveStations.printErrorToLog(e);
+		} catch (IOException e) {
+			LoadSaveOps.printErrorToLog(e);
 		}
 		imageDetail.setImageBitmap(pic);
 		imageDetail.setOnTouchListener(new View.OnTouchListener() {

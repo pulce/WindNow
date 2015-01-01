@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -42,7 +43,7 @@ import android.util.Log;
  */
 
 @SuppressLint("SimpleDateFormat")
-public class LoadSaveStations {
+public class LoadSaveOps {
 	private static String userDir = PreferenceManager
 			.getDefaultSharedPreferences(OnlyContext.getContext()).getString(
 					"user_dir", "WindNow");
@@ -88,7 +89,7 @@ public class LoadSaveStations {
 			if (saveFile) {
 				saveStations(stations);
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			printErrorToLog(e);
 		}
 		return stations;
@@ -106,7 +107,7 @@ public class LoadSaveStations {
 				bw.newLine();
 			}
 			bw.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			printErrorToLog(e);
 		}
 	}
@@ -132,7 +133,7 @@ public class LoadSaveStations {
 			bw.write(line);
 			bw.newLine();
 			bw.close();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			Log.e("Error writing errorLog", ex.toString());
 		}
 	}
