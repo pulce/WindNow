@@ -46,7 +46,6 @@ There are three ways to create new stations:\n
 1. Specifying url and name in the \"new station\" dialog in settings.\n
 2. Sharing an image or a valid url in an android browser.\n
 3. Modifying the (self-explanatory) \"stations\" file in the \"WindNow\" directory on your sd-card.\n\n</string>
-    <string name="pref_dialog_title_dir">Dir for stations file relative to /sdcard/</string>
     <string name="pref_title_dir">Select directory for stations file</string>
     <string name="create_the_new_station">Create the new station:</string>
     <string name="what_to_do">What do you want to do?</string>
@@ -59,5 +58,10 @@ There are three ways to create new stations:\n
     <string name="action_help">Help</string>
     <string name="downloading">Download started</string>
     <string name="download_error">Download error</string>
+    <string name="could_not_parse">Could not parse. Wrong Url?</string>
+    <string name="maximum_download_retries">Maximum download retries</string>
+    <string name="maximum_number_summary">Currently set to:</string>
+    <string name="pref_dialog_title_dir">Userdirectory on sd-card</string>
+    <string name="pref_dialog_sum_dir">Currently set to:</string>
 
 </resources>

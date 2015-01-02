@@ -1,6 +1,12 @@
 package com.windnow;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -13,6 +19,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +57,8 @@ public class MainActivity extends ActionBarActivity {
 	private static final String VERSIONID = "1.0.0";
 	private StationListAdapter stAda;
 	private String sharedUrl;
+	public static int maxRetries;
+
 	public static final int DIALOG_NEW_STAT = -1;
 	public static final int DIALOG_SHARED_STAT = -2;
 	public static final boolean DUMMY = false;
@@ -62,6 +71,9 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		maxRetries = Integer.parseInt(PreferenceManager
+				.getDefaultSharedPreferences(OnlyContext.getContext())
+				.getString("pref_list", "5"));
 		objects.addAll(LoadSaveOps.loadStations());
 		final ListView listview = (ListView) findViewById(R.id.listview);
 		stAda = new StationListAdapter(this, R.layout.main_list_item, objects);
@@ -146,12 +158,15 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private void initiateDl(Station st) {
+		if (st.getStatus() == Station.DOWNLOADING) {
+			return;
+		}
 		st.setLoaded(false);
-		st.setSecLine(getString(R.string.downloading));
+		st.setStatus(Station.DOWNLOADING);
 		stAda.notifyDataSetChanged();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			new DownloadStation(st).executeOnExecutor(
-					AsyncTask.THREAD_POOL_EXECUTOR);
+			new DownloadStation(st)
+					.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
 			new DownloadStation(st).execute();
 		}
@@ -162,7 +177,7 @@ public class MainActivity extends ActionBarActivity {
 	 * AsyncTask to download the content...
 	 *
 	 */
-	private class DownloadStation extends AsyncTask<Void, Integer, Void> {
+	private class DownloadStation extends AsyncTask<Void, Void, Void> {
 		private Station station;
 
 		private DownloadStation(Station station) {
@@ -171,22 +186,58 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		protected Void doInBackground(Void... v) {
-			try {
-				if (station.getType() == Station.PIC) {
-					DownloadStations.downloadPic(station);
-				} else if (station.getType() == Station.BZ) {
-					DownloadStations.downloadBZ(station);
-				} else {
-					DownloadStations.downloadWC(station);
+			for (int dlTry = 1; dlTry <= maxRetries; dlTry++) {
+				try {
+					station.setProgress(0);
+					String filename = "pic" + station.getUrl().hashCode();
+					int IO_BUFFER_SIZE = 4 * 1024;
+					URLConnection uc = new URL(station.getUrl())
+							.openConnection();
+					int contentLength = uc.getContentLength();
+					InputStream input = new BufferedInputStream(
+							uc.getInputStream(), IO_BUFFER_SIZE);
+					OutputStream out = new BufferedOutputStream(OnlyContext
+							.getContext().openFileOutput(filename,
+									OnlyContext.MODE_PRIVATE), IO_BUFFER_SIZE);
+					byte[] b = new byte[IO_BUFFER_SIZE];
+					int read;
+					long total = 0;
+					while ((read = input.read(b)) != -1) {
+						total += read;
+						if (contentLength > 0) {
+							station.setProgress((int) ((total * 100) / contentLength));
+							publishProgress();
+						}
+						out.write(b, 0, read);
+					}
+					input.close();
+					out.close();
+
+					station.setLoaded(true);
+					station.setValued(true);
+					station.setStatus(Station.LOADED);
+					station.setDate(Calendar.getInstance().getTime());
+
+					if (station.getType() == Station.PIC) {
+					} else if (station.getType() == Station.BZ) {
+						station.parseCache();
+					} else {
+						station.parseCache();
+					}
+					break;
+				} catch (IOException e) {
+					if (dlTry == maxRetries) {
+						station.setStatus(Station.DOWNLOAD_ERROR);
+					}
+					LoadSaveOps.printErrorToLog(e);
+					e.printStackTrace();
 				}
-				station.setLoaded(true);
-				station.setValued(true);
-				station.setDate(Calendar.getInstance().getTime());
-			} catch (IOException e) {
-				station.setSecLine(getString(R.string.download_error));
-				LoadSaveOps.printErrorToLog(e);
 			}
 			return null;
+		}
+
+		protected void onProgressUpdate(Void... p) {
+			stAda.notifyDataSetChanged();
 		}
 
 		@Override
@@ -258,8 +309,8 @@ public class MainActivity extends ActionBarActivity {
 			refButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					initiateDl(objects.get(id));
 					alertDialog.dismiss();
+					initiateDl(objects.get(id));
 				}
 			});
 

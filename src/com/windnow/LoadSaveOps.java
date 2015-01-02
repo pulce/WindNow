@@ -44,9 +44,8 @@ import android.util.Log;
 
 @SuppressLint("SimpleDateFormat")
 public class LoadSaveOps {
-	private static String userDir = PreferenceManager
-			.getDefaultSharedPreferences(OnlyContext.getContext()).getString(
-					"user_dir", "WindNow");
+	public static String userDir = PreferenceManager.getDefaultSharedPreferences(
+			OnlyContext.getContext()).getString("user_dir", "WindNow");;
 	private static File localDir = new File(Environment
 			.getExternalStorageDirectory().getAbsolutePath() + "/" + userDir);
 	private static File stationsFile = new File(Environment

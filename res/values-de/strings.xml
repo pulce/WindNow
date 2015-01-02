@@ -47,7 +47,6 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
 1. Adresse und Name im \"neue Station\" Dialog in den Einstellungen eingeben.\n
 2. Durch Teilen einer Url oder einer Grafik in einem Browser.\n
 3. Durch Modifikation der (selbsterklärenden) \"stations\" Datei im \"WindNow\" Verzeichnis auf der sd-Karte.\n\n</string>
-    <string name="pref_dialog_title_dir">Verzeichnis für stations-Datei relativ zu /sdcard/</string>
     <string name="pref_title_dir">Wähle Verzeichnis für stations-Datei</string>
     <string name="create_the_new_station">Neue Station erstellen:</string>
     <string name="what_to_do">Was wollen Sie tun?</string>
@@ -60,5 +59,10 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="action_help">Hilfe</string>
     <string name="downloading">Download gestartet</string>
     <string name="download_error">Fehler beim Download</string>
-    
+    <string name="could_not_parse">Konnte Daten nicht interpretieren. Falsche URL?</string>
+    <string name="maximum_download_retries">Max. Anzahl Downloadversuche</string>
+    <string name="maximum_number_summary">Derzeitige Anzahl:</string>
+    <string name="pref_dialog_title_dir">Benutzerverzeichnis auf SD-Karte</string>
+    <string name="pref_dialog_sum_dir">Derzeitiges Verzeichnis:</string>
+
 </resources>
