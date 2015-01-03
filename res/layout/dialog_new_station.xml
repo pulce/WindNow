@@ -42,7 +42,7 @@
             android:background="@android:color/darker_gray" />
 
         <View
-            android:id="@+id/ViewColorPickerHelper"
+            android:id="@+id/view22"
             android:layout_width="1dip"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -59,7 +59,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@id/ViewColorPickerHelper"
+            android:layout_toLeftOf="@id/view22"
             android:background="@drawable/selector_transparent_button"
             android:text="@android:string/cancel" />
 
@@ -70,7 +70,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/ViewColorPickerHelper"
+            android:layout_toRightOf="@id/view22"
             android:background="@drawable/selector_transparent_button"
             android:text="@android:string/ok" />
     </RelativeLayout>

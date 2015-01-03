@@ -1,26 +1,30 @@
 <?xml version='1.0' encoding='utf-8'?>
-<LinearLayout xmlns:android='http://schemas.android.com/apk/res/android'
-    android:layout_width='fill_parent'
-    android:layout_height='fill_parent'
-    android:orientation='vertical'
-    android:padding='10sp' >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/refresh"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/diag_refresh_station"
-        android:singleLine='true' >
-
+        android:background="@drawable/selector_transparent_button"
+        android:text="@string/diag_refresh_station" >
     </Button>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="0dip"
+        android:layout_marginRight="0dip"
+        android:background="@android:color/darker_gray" />
 
     <Button
-        android:id='@+id/delete'
-        android:layout_width='match_parent'
-        android:layout_height='wrap_content'
-        android:text="@string/diag_delete_station"
-        android:singleLine='true' >
+        android:id="@+id/delete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_transparent_button"
+        android:text="@string/diag_delete_station" >
     </Button>
-
 
 </LinearLayout>
