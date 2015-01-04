@@ -65,5 +65,6 @@ There are three ways to create new stations:\n
     <string name="pref_dialog_sum_dir">Currently set to:</string>
     <string name="edit_station">Edit station</string>
     <string name="edit_the_station">Edit station</string>
+    <string name="position_in_list">Position in list:</string>
 
 </resources>

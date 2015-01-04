@@ -25,9 +25,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 /**
  * 
@@ -54,7 +56,7 @@ import android.widget.ListView;
 @SuppressLint({ "InflateParams", "NewApi" })
 public class MainActivity extends ActionBarActivity {
 
-	private static final String VERSIONID = "1.0.0";
+	private static final String VERSIONID = "1.1.0";
 	private StationListAdapter stAda;
 	private String sharedUrl = null;
 	public static int maxRetries;
@@ -279,6 +281,7 @@ public class MainActivity extends ActionBarActivity {
 		final AlertDialog alertDialog = (AlertDialog) dialog;
 		final boolean edit = id == DIALOG_EDIT_STAT;
 		final boolean share = id == DIALOG_SHARE_STAT;
+		int position = objects.size();
 		switch (id) {
 		case DIALOG_SHARE_STAT:
 		case DIALOG_EDIT_STAT:
@@ -290,25 +293,39 @@ public class MainActivity extends ActionBarActivity {
 			if (edit) {
 				stationName.setText(objects.get(stationToEdit).getName());
 				stationUrl.setText(objects.get(stationToEdit).getUrl());
+				position = stationToEdit;
 			}
 			if (share) {
+				stationName.setText("");
 				stationUrl.setText(sharedUrl);
 			}
+			final Spinner dropdown = (Spinner) alertDialog
+					.findViewById(R.id.spinner1);
+			ArrayList<Integer> items = new ArrayList<Integer>();
+			for (int i = 1; i <= (edit ? objects.size() : objects.size() + 1); i++) {
+				items.add(i);
+			}
+			ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this,
+					android.R.layout.simple_spinner_item, items);
+			dropdown.setAdapter(adapter);
+			dropdown.setSelection(position);
 			Button okButton = (Button) alertDialog
 					.findViewById(R.id.btn_confirm);
 			okButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Station newStation;
 					if (edit) {
-						objects.get(stationToEdit).setName(
-								stationName.getText().toString());
-						objects.get(stationToEdit).setUrl(
-								stationUrl.getText().toString());
+						newStation = objects.get(stationToEdit);
+						newStation.setName(stationName.getText().toString());
+						newStation.setUrl(stationUrl.getText().toString());
+						objects.remove(newStation);
 					} else {
-						Station newStation = new Station(stationName.getText()
+						newStation = new Station(stationName.getText()
 								.toString(), stationUrl.getText().toString());
-						objects.add(newStation);
 					}
+					objects.add((Integer) dropdown.getSelectedItem() - 1,
+							newStation);
 					stAda.notifyDataSetChanged();
 					LoadSaveOps.saveStations(objects);
 					alertDialog.dismiss();

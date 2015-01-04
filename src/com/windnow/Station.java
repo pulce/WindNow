@@ -64,9 +64,6 @@ public class Station implements Comparable<Station> {
 		this.name = name;
 		this.url = url;
 		if (!url.startsWith("http")) {
-			if (!url.startsWith("www.")) {
-				this.url = "www." + this.url;
-			}
 			this.url = "http://" + this.url;
 		}
 		if (url.contains("wetteronline") && url.contains("aktuelles-wetter"))
