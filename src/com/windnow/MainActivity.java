@@ -56,11 +56,13 @@ public class MainActivity extends ActionBarActivity {
 
 	private static final String VERSIONID = "1.0.0";
 	private StationListAdapter stAda;
-	private String sharedUrl;
+	private String sharedUrl = null;
 	public static int maxRetries;
 
+	private static int stationToEdit;
 	public static final int DIALOG_NEW_STAT = -1;
-	public static final int DIALOG_SHARED_STAT = -2;
+	public static final int DIALOG_EDIT_STAT = -2;
+	public static final int DIALOG_SHARE_STAT = -3;
 	public static final boolean DUMMY = false;
 	final ArrayList<Station> objects = new ArrayList<Station>();
 
@@ -118,7 +120,7 @@ public class MainActivity extends ActionBarActivity {
 
 		if (Intent.ACTION_SEND.equals(action) && type != null) {
 			sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
-			showDialog(DIALOG_NEW_STAT);
+			showDialog(DIALOG_SHARE_STAT);
 		}
 	}
 
@@ -253,9 +255,14 @@ public class MainActivity extends ActionBarActivity {
 		AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(this);
 		View dialogview = null;
 		switch (id) {
+		case DIALOG_SHARE_STAT:
 		case DIALOG_NEW_STAT:
 			dialogview = inflater.inflate(R.layout.dialog_new_station, null);
 			dialogbuilder.setTitle(R.string.create_the_new_station);
+			break;
+		case DIALOG_EDIT_STAT:
+			dialogview = inflater.inflate(R.layout.dialog_new_station, null);
+			dialogbuilder.setTitle(R.string.edit_the_station);
 			break;
 		default:
 			dialogview = inflater.inflate(R.layout.dialog_ref_del, null);
@@ -264,30 +271,44 @@ public class MainActivity extends ActionBarActivity {
 		}
 		dialogbuilder.setView(dialogview);
 		dialogDetails = dialogbuilder.create();
-
 		return dialogDetails;
 	}
 
 	@Override
 	protected void onPrepareDialog(final int id, Dialog dialog) {
 		final AlertDialog alertDialog = (AlertDialog) dialog;
+		final boolean edit = id == DIALOG_EDIT_STAT;
+		final boolean share = id == DIALOG_SHARE_STAT;
 		switch (id) {
-		case DIALOG_SHARED_STAT:
+		case DIALOG_SHARE_STAT:
+		case DIALOG_EDIT_STAT:
 		case DIALOG_NEW_STAT:
 			final EditText stationName = (EditText) alertDialog
 					.findViewById(R.id.newStationName);
 			final EditText stationUrl = (EditText) alertDialog
 					.findViewById(R.id.newStationUrl);
-			// if (id == DIALOG_SHARED_STAT)
-			stationUrl.setText(sharedUrl);
+			if (edit) {
+				stationName.setText(objects.get(stationToEdit).getName());
+				stationUrl.setText(objects.get(stationToEdit).getUrl());
+			}
+			if (share) {
+				stationUrl.setText(sharedUrl);
+			}
 			Button okButton = (Button) alertDialog
 					.findViewById(R.id.btn_confirm);
 			okButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Station newStation = new Station(stationName.getText()
-							.toString(), stationUrl.getText().toString());
-					objects.add(newStation);
+					if (edit) {
+						objects.get(stationToEdit).setName(
+								stationName.getText().toString());
+						objects.get(stationToEdit).setUrl(
+								stationUrl.getText().toString());
+					} else {
+						Station newStation = new Station(stationName.getText()
+								.toString(), stationUrl.getText().toString());
+						objects.add(newStation);
+					}
 					stAda.notifyDataSetChanged();
 					LoadSaveOps.saveStations(objects);
 					alertDialog.dismiss();
@@ -305,6 +326,7 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		default:
 			Button refButton = (Button) alertDialog.findViewById(R.id.refresh);
+			Button editButton = (Button) alertDialog.findViewById(R.id.edit_st);
 			Button delButton = (Button) alertDialog.findViewById(R.id.delete);
 			refButton.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -313,7 +335,15 @@ public class MainActivity extends ActionBarActivity {
 					initiateDl(objects.get(id));
 				}
 			});
-
+			editButton.setOnClickListener(new View.OnClickListener() {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onClick(View v) {
+					alertDialog.dismiss();
+					stationToEdit = id;
+					showDialog(DIALOG_EDIT_STAT);
+				}
+			});
 			delButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -344,5 +374,4 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		}
 	}
-
 }

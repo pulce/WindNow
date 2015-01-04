@@ -64,5 +64,7 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="maximum_number_summary">Derzeitige Anzahl:</string>
     <string name="pref_dialog_title_dir">Benutzerverzeichnis auf SD-Karte</string>
     <string name="pref_dialog_sum_dir">Derzeitiges Verzeichnis:</string>
-
+    <string name="edit_station">Station Bearbeiten</string>
+    <string name="edit_the_station">Station Bearbeiten</string>
+    
 </resources>
