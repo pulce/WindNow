@@ -1,0 +1,12 @@
+V1.1.0------------------
+New Functions:
+- Handle wetterdienst.de
+- Handle valley station of provinz.bz.it
+- Edit stations
+- Sort stations
+- Check for updates
+- Added beautiful buttons everywhere
+
+Bugfixing:
+- Fixed textstation does not scroll
+- Fixed textfragments remain in dialog "new station"

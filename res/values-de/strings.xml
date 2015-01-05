@@ -37,10 +37,11 @@
             Folgende Typen von Stationen sind vorgesehen:\n
             &#8226; einzelne Bilder mit einer statischen Internetadresse.\n
             &#8226; Stationen die von wetteronline.com unter \"aktuelles Wetter\" ausgegeben werden.\n
-            &#8226; Die Informationen von http://www.provinz.bz.it/wetter/hoehenwindstationen.asp.\n\n
+            &#8226; Stationen die von wetterdienst.de unter \"Aktuell\" ausgegeben werden.\n
+            &#8226; Wetterstationen Berg / Tal von http://www.provinz.bz.it/wetter/wetterstationen.asp.\n\n
 
 Um eine Station (neu) zu laden können entweder alle Stationen gleichzeitig über den Menüpunkt in den Einstellungen 
-aktualisiert werden, oder einzeln per langem Klick auf die Station in der Liste. Das Löschen von Stationen
+aktualisiert werden, oder einzeln per langem Klick auf die Station in der Liste. Das Löschen und Bearbeiten von Stationen
 ist ebenfalls über einen langen Klick möglich.\n\n
  
 Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
@@ -66,6 +67,10 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="pref_dialog_sum_dir">Derzeitiges Verzeichnis:</string>
     <string name="edit_station">Station bearbeiten</string>
     <string name="edit_the_station">Station bearbeiten</string>
-    <string name="position_in_list">Position in der Liste:</string>
+    <string name="position_in_list">Position in Liste:</string>
+    <string name="check_for_updates">Auf Updates prüfen</string>
+    <string name="check_for_updates_failed">Suche nach Updates fehlgeschlagen.</string>
+    <string name="already_latest_version">Sie verwenden die aktuellste Version</string>
+    <string name="new_version_available">ist verfügbar, Sie benutzen</string>
     
 </resources>

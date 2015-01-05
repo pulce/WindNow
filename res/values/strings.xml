@@ -37,10 +37,11 @@
             One station can only be\n
             &#8226; a single image with a static url.\n
             &#8226; a station provided by wetteronline.com as \"aktuelles Wetter\".\n
-            &#8226; the information provided by http://www.provinz.bz.it/wetter/hoehenwindstationen.asp.\n\n
+			&#8226; a station provided by wetterdienst.de as \"Aktuell\".\n
+            &#8226; mountain / valley stations of http://www.provinz.bz.it/wetter/wetterstationen.asp.\n\n
  
 To load (or refresh) data for a station either refresh all stations from the settings menu, or long-click 
-a station in the list for a selective refresh. Deleting a station is possible by long-clicking.\n\n
+a station in the list for a selective refresh. Deleting and editing a station is possible by long-clicking.\n\n
             
 There are three ways to create new stations:\n
 1. Specifying url and name in the \"new station\" dialog in settings.\n
@@ -66,5 +67,9 @@ There are three ways to create new stations:\n
     <string name="edit_station">Edit station</string>
     <string name="edit_the_station">Edit station</string>
     <string name="position_in_list">Position in list:</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="check_for_updates_failed">Check for updates failed</string>
+    <string name="already_latest_version">You are using the latest version</string>
+    <string name="new_version_available">is available, you use</string>
 
 </resources>

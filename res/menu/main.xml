@@ -26,5 +26,9 @@
         android:id="@+id/action_about"
         android:orderInCategory="100"
         android:title="@string/action_about"/>
+    <item
+        android:id="@+id/action_update"
+        android:orderInCategory="100"
+        android:title="@string/check_for_updates"/>
 
 </menu>

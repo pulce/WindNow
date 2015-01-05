@@ -9,13 +9,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import android.support.v7.app.ActionBarActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 /**
  * 
@@ -57,18 +58,16 @@ import android.widget.Spinner;
 public class MainActivity extends ActionBarActivity {
 
 	private static final String VERSIONID = "1.1.0";
+	private static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
+	
 	private StationListAdapter stAda;
 	private String sharedUrl = null;
 	public static int maxRetries;
-
 	private static int stationToEdit;
 	public static final int DIALOG_NEW_STAT = -1;
 	public static final int DIALOG_EDIT_STAT = -2;
 	public static final int DIALOG_SHARE_STAT = -3;
-	public static final boolean DUMMY = false;
 	final ArrayList<Station> objects = new ArrayList<Station>();
-
-	static ArrayList<String> txt;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -154,6 +153,9 @@ public class MainActivity extends ActionBarActivity {
 			for (Station st : objects) {
 				initiateDl(st);
 			}
+			break;
+		case R.id.action_update:
+			new CheckForUpdates().execute(VERSIONID);
 			break;
 		default:
 			break;
@@ -247,6 +249,47 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(Void v) {
 			stAda.notifyDataSetChanged();
+		}
+	}
+
+	private class CheckForUpdates extends AsyncTask<String, Void, Boolean> {
+		private String answer = getString(R.string.check_for_updates_failed);
+
+		@Override
+		protected Boolean doInBackground(String... org) {
+			String tag;
+			try {
+				URLConnection con = new URL(APPURL).openConnection();
+				con.connect();
+				InputStream is = con.getInputStream();
+				String gt = con.getURL().toString();
+				if (gt == null) {
+					return false;
+				}
+				String[] spl = gt.split("/");
+				tag = spl[spl.length - 1];
+				is.close();
+			} catch (IOException e) {
+				return false;
+			}
+			if (tag.equals(VERSIONID)) {
+				answer = getString(R.string.already_latest_version) + " " + VERSIONID + ".";
+				return false;
+			}
+			answer = "Version " + tag + " " + getString(R.string.new_version_available) + " " + VERSIONID
+					+ ".";
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean newVersion) {
+			Toast.makeText(getApplicationContext(), answer, Toast.LENGTH_LONG)
+					.show();
+			if (newVersion) {
+				Intent browse = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(APPURL));
+				startActivity(browse);
+			}
 		}
 	}
 

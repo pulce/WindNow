@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,6 +51,7 @@ public class Station implements Comparable<Station> {
 	public static final int PIC = 1;
 	public static final int WC = 2;
 	public static final int BZ = 3;
+	public static final int WD = 4;
 
 	// Status
 	public static final int NOT_LOADED = 1;
@@ -68,10 +70,11 @@ public class Station implements Comparable<Station> {
 		}
 		if (url.contains("wetteronline") && url.contains("aktuelles-wetter"))
 			this.type = WC;
-		else if (url.contains("provinz.bz.it")
-				&& url.contains("hoehenwindstationen"))
+		else if (url.contains("provinz.bz.it") && url.endsWith(".asp"))
 			this.type = BZ;
-		else {
+		else if (url.contains("wetterdienst.de") && url.contains("Aktuell")) {
+			this.type = WD;
+		} else {
 			this.type = PIC;
 		}
 		// Check loaded
@@ -101,7 +104,8 @@ public class Station implements Comparable<Station> {
 		if (this.status == NOT_LOADED) {
 			return OnlyContext.getContext().getString(R.string.not_loaded);
 		} else if (this.status == DOWNLOADING) {
-			return OnlyContext.getContext().getString(R.string.downloading) + "..." + this.progress + "%";
+			return OnlyContext.getContext().getString(R.string.downloading)
+					+ "..." + this.progress + "%";
 		} else if (this.status == LOADED) {
 			return OnlyContext.getContext().getString(R.string.downloaded_at)
 					+ sdf.format(this.date);
@@ -198,6 +202,8 @@ public class Station implements Comparable<Station> {
 				this.tabTxt = parseWC(doc);
 			} else if (this.type == BZ) {
 				this.tabTxt = parseBZ(doc);
+			} else if (this.type == WD) {
+				this.tabTxt = parseWD(doc);
 			}
 		} catch (IOException e) {
 			LoadSaveOps.printErrorToLog(e);
@@ -260,34 +266,90 @@ public class Station implements Comparable<Station> {
 		Elements tableElements = doc
 				.select("table[class=avalanches-stations]:contains(Messstationen)");
 		// Headers
-		patschText.add("Station, Höhe, Zeit&/Ri&/Wind&/Spitze");
-		// Rows
+		ArrayList<String> searchers = new ArrayList<String>();
+		searchers.add("dd");
+		searchers.add("ff");
+		searchers.add("bb");
+		ArrayList<Integer> posis = new ArrayList<Integer>();
+		posis.add(0);// Zeit
+		ArrayList<String> headers = new ArrayList<String>();
+		Elements tableHeadElements = tableElements.select("tr");
+		Element trow = tableHeadElements.get(0);
+		Elements trowItems = trow.select("th, td");
+		for (int j = 2; j < trowItems.size(); j++) {
+			if (searchers.contains(trowItems.get(j).text().substring(0, 2))) {
+				headers.add(trowItems.get(j).text());
+				posis.add(j);
+			}
+		}
+		String head = "Station, Höhe, Zeit";
+		for (String line : headers) {
+			head += "&/" + line;
+		}
+		patschText.add(head);
+
 		Elements tableRowElements = tableElements.select(":not(thead) tr");
+		// Rows
 		outerloop: for (int i = 0; i < tableRowElements.size(); i++) {
 			Element row = tableRowElements.get(i);
 			Elements rowItems = row.select("th, td");
 			String line = "";
 			for (int j = 0; j < rowItems.size(); j++) {
-				if (j != 2 && j != 3) {
-					String el = rowItems.get(j).text();
-					if (j == 0 && el.contains("(")) {
-						line += toCamelCase(el.split("\\(")[0].trim()) + "\n";
-						line += el.split("\\(")[1].replace(")", "").trim()
-								+ ", ";
-					} else if (j == 1) {
-						if (el.length() > 5) {
-							line += el.substring(el.length() - 5); // no
-																	// date,
-																	// just
-																	// time
-						} else {
-							continue outerloop;
-						}
-					} else
-						line += rowItems.get(j).text();
-					if (j > 4)
-						line += " km/h";
+				String el = rowItems.get(j).text();
+				if (j == 0 && el.contains("(")) {
+					line += toCamelCase(el.split("\\(")[0].trim()) + "\n";
+					line += el.split("\\(")[1].replace(")", "").trim() + ", ";
+				} else if (j == 1) {
+					if (el.length() > 5) {
+						line += el.substring(el.length() - 5); // no date,
+																// just time
+						line += "&/";
+					} else {
+						continue outerloop;
+					}
+				} else if (posis.contains(j)) {
+					line += rowItems.get(j).text();
 					if (j != rowItems.size() - 1 && j != 0)
+						line += "&/";
+				}
+
+			}
+			patschText.add(line);
+		}
+		return patschText;
+	}
+
+	// Wetterdienst.de
+	public static ArrayList<String> parseWD(Document doc) {
+		ArrayList<String> patschText = new ArrayList<String>();
+		Elements tableElements = doc.select("table[class=weather-table]");
+		// Headers
+		ArrayList<String> searchers = new ArrayList<String>();
+		searchers.add("Luftdruck");
+		searchers.add("Wind");
+		ArrayList<Integer> posis = new ArrayList<Integer>();
+		posis.add(0);// Zeit
+		ArrayList<String> headers = new ArrayList<String>();
+		headers.add("Zeit");
+		// Rows
+		Elements tableRowElements = tableElements.select(":not(thead) tr");
+		Element trow = tableRowElements.get(0);
+		Elements trowItems = trow.select("th, td");
+		for (int j = 1; j < trowItems.size(); j++) {
+			if (searchers.contains(trowItems.get(j).text())) {
+				headers.add(trowItems.get(j).text());
+				posis.add(j);
+			}
+		}
+		// Rows
+		for (int i = 0; i < tableRowElements.size(); i++) {
+			Element row = tableRowElements.get(i);
+			Elements rowItems = row.select("th, td");
+			String line = "";
+			for (int j = 0; j < rowItems.size(); j++) {
+				if (posis.contains(j)) {
+					line += rowItems.get(j).text();
+					if (j != rowItems.size() - 1)
 						line += "&/";
 				}
 			}
