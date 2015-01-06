@@ -15,6 +15,7 @@ import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -64,9 +65,7 @@ public class LoadSaveOps {
 	public static ArrayList<Station> loadStations() {
 		ArrayList<Station> stations = new ArrayList<Station>();
 		try {
-			if (!localDir.exists()) {
-				localDir.mkdirs();
-			}
+			mkLocalDir();
 			BufferedReader br = null;
 			boolean saveFile = !stationsFile.exists();
 			if (saveFile) {
@@ -96,9 +95,7 @@ public class LoadSaveOps {
 
 	public static void saveStations(ArrayList<Station> stations) {
 		try {
-			if (!localDir.exists()) {
-				localDir.mkdirs();
-			}
+			mkLocalDir();
 			FileOutputStream fos = new FileOutputStream(stationsFile);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 			for (Station station : stations) {
@@ -106,6 +103,7 @@ public class LoadSaveOps {
 				bw.newLine();
 			}
 			bw.close();
+			MediaScannerConnection.scanFile(OnlyContext.getContext(), new String[] { stationsFile.getAbsolutePath() }, null, null);
 		} catch (IOException e) {
 			printErrorToLog(e);
 		}
@@ -113,9 +111,7 @@ public class LoadSaveOps {
 
 	static void printErrorToLog(Exception e) {
 		try {
-			if (!localDir.exists()) {
-				localDir.mkdirs();
-			}
+			mkLocalDir();
 			boolean append = false;
 			SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
 			if (fmt.format(new Date(errorLogFile.lastModified())).equals(fmt.format(new Date()))) {
@@ -132,8 +128,18 @@ public class LoadSaveOps {
 			bw.write(line);
 			bw.newLine();
 			bw.close();
+			MediaScannerConnection.scanFile(OnlyContext.getContext(), new String[] { errorLogFile.getAbsolutePath() }, null, null);
 		} catch (IOException ex) {
 			Log.e("Error writing errorLog", ex.toString());
 		}
+		
 	}
+	
+	private static void mkLocalDir() {
+		if (!localDir.exists()) {
+			localDir.mkdirs();
+		}
+		MediaScannerConnection.scanFile(OnlyContext.getContext(), new String[] { localDir.getAbsolutePath() }, null, null);
+	}
+
 }

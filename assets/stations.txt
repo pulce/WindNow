@@ -9,3 +9,4 @@ Seegrube;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/seegrube.png
 Schlick;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/schlickeralm.png
 Hohe Munde;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/hohemunde.png
 Wasserkuppe;http://www.wetterdienst.de/Europawetter/Wasserkuppe~2813735/Aktuell/
+Föhnalarm;http://www.wetteralarm.at/uploads/pics/uwz-at_foehn_de.png
