@@ -10,3 +10,7 @@ New Functions:
 Bugfixing:
 - Fixed textstation does not scroll
 - Fixed textfragments remain in dialog "new station"
+
+V1.1.1------------------
+Bugfixing:
+- Userdir not visible on mounted device
