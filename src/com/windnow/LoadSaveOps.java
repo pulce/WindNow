@@ -87,7 +87,7 @@ public class LoadSaveOps {
 			if (saveFile) {
 				saveStations(stations);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			printErrorToLog(e);
 		}
 		return stations;

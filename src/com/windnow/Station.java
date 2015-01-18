@@ -68,7 +68,7 @@ public class Station implements Comparable<Station> {
 		if (!url.startsWith("http")) {
 			this.url = "http://" + this.url;
 		}
-		if (url.contains("wetteronline") && url.contains("aktuelles-wetter"))
+		if (url.contains("wetteronline") && (url.contains("aktuelles-wetter") || url.contains("wetter-aktuell")))
 			this.type = WC;
 		else if (url.contains("provinz.bz.it") && url.endsWith(".asp"))
 			this.type = BZ;
@@ -207,10 +207,13 @@ public class Station implements Comparable<Station> {
 			}
 		} catch (IOException e) {
 			LoadSaveOps.printErrorToLog(e);
+		} catch (Exception e) {
+			LoadSaveOps.printErrorToLog(e);
+			this.status = PARSE_ERROR;
 		}
 	}
 
-	private static ArrayList<String> parseWC(Document doc) {
+	private static ArrayList<String> parseWC(Document doc) throws Exception {
 		ArrayList<String> patschText = new ArrayList<String>();
 		Elements tableElements = doc
 				.select("table[class=hourly]:has(th:contains(Spitze))");
@@ -261,7 +264,7 @@ public class Station implements Comparable<Station> {
 		return patschText;
 	}
 
-	private static ArrayList<String> parseBZ(Document doc) {
+	private static ArrayList<String> parseBZ(Document doc) throws Exception {
 		ArrayList<String> patschText = new ArrayList<String>();
 		Elements tableElements = doc
 				.select("table[class=avalanches-stations]:contains(Messstationen)");
@@ -320,7 +323,7 @@ public class Station implements Comparable<Station> {
 	}
 
 	// Wetterdienst.de
-	public static ArrayList<String> parseWD(Document doc) {
+	public static ArrayList<String> parseWD(Document doc) throws Exception {
 		ArrayList<String> patschText = new ArrayList<String>();
 		Elements tableElements = doc.select("table[class=weather-table]");
 		// Headers

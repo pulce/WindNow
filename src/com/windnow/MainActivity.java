@@ -57,7 +57,7 @@ import android.widget.Toast;
 @SuppressLint({ "InflateParams", "NewApi" })
 public class MainActivity extends ActionBarActivity {
 
-	private static final String VERSIONID = "1.1.1";
+	private static final String VERSIONID = "1.1.2";
 	private static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 	
 	private StationListAdapter stAda;
@@ -224,10 +224,7 @@ public class MainActivity extends ActionBarActivity {
 					station.setStatus(Station.LOADED);
 					station.setDate(Calendar.getInstance().getTime());
 
-					if (station.getType() == Station.PIC) {
-					} else if (station.getType() == Station.BZ) {
-						station.parseCache();
-					} else {
+					if (station.getType() != Station.PIC) {
 						station.parseCache();
 					}
 					break;

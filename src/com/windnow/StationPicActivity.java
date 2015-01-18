@@ -1,7 +1,6 @@
 package com.windnow;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
@@ -73,12 +72,12 @@ public class StationPicActivity extends ActionBarActivity {
 			FileInputStream is = this.openFileInput(filename);
 			pic = BitmapFactory.decodeStream(is);
 			is.close();
-		} catch (IOException e) {
+			imageDetail.setImageBitmap(pic);
+		} catch (Exception e) {
 			LoadSaveOps.printErrorToLog(e);
 		}
-		imageDetail.setImageBitmap(pic);
-		imageDetail.setOnTouchListener(new View.OnTouchListener() {
 
+		imageDetail.setOnTouchListener(new View.OnTouchListener() {
 			@SuppressLint("ClickableViewAccessibility")
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -123,7 +122,7 @@ public class StationPicActivity extends ActionBarActivity {
 							matrix.postScale(scale, scale, midPoint.x,
 									midPoint.y);
 							matrix.postTranslate(event.getX() - startPoint.x,
-									event.getY() - startPoint.y); //new
+									event.getY() - startPoint.y); // new
 						}
 					}
 					break;
