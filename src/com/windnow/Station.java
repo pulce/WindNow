@@ -217,6 +217,11 @@ public class Station implements Comparable<Station> {
 		ArrayList<String> patschText = new ArrayList<String>();
 		Elements tableElements = doc
 				.select("table[class=hourly]:has(th:contains(Spitze))");
+		// Handle Stations that deliver data only every 6 hours
+		if (tableElements.size() == 0) {
+			tableElements = doc
+					.select("table[class=sixhourly]:has(th:contains(Spitze))");
+		}
 		// Headers
 		ArrayList<String> headers = new ArrayList<String>();
 		ArrayList<String> units = new ArrayList<String>();

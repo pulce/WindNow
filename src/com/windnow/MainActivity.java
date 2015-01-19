@@ -57,7 +57,7 @@ import android.widget.Toast;
 @SuppressLint({ "InflateParams", "NewApi" })
 public class MainActivity extends ActionBarActivity {
 
-	private static final String VERSIONID = "1.1.2";
+	private static final String VERSIONID = "1.1.3";
 	private static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 	
 	private StationListAdapter stAda;
