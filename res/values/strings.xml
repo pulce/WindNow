@@ -47,7 +47,6 @@ There are three ways to create new stations:\n
 1. Specifying url and name in the \"new station\" dialog in settings.\n
 2. Sharing an image or a valid url in an android browser.\n
 3. Modifying the (self-explanatory) \"stations\" file in the \"WindNow\" directory on your sd-card.\n\n</string>
-    <string name="pref_title_dir">Select directory for stations file</string>
     <string name="create_the_new_station">Create the new station:</string>
     <string name="what_to_do">What do you want to do?</string>
     <string name="really_delete">Really delete this station?</string>
@@ -62,8 +61,6 @@ There are three ways to create new stations:\n
     <string name="could_not_parse">Could not parse. Wrong Url?</string>
     <string name="maximum_download_retries">Maximum download retries</string>
     <string name="maximum_number_summary">Currently set to:</string>
-    <string name="pref_dialog_title_dir">Userdirectory on sd-card</string>
-    <string name="pref_dialog_sum_dir">Currently set to:</string>
     <string name="edit_station">Edit station</string>
     <string name="edit_the_station">Edit station</string>
     <string name="position_in_list">Position in list:</string>
@@ -71,5 +68,15 @@ There are three ways to create new stations:\n
     <string name="check_for_updates_failed">Check for updates failed</string>
     <string name="already_latest_version">You are using the latest version</string>
     <string name="new_version_available">is available, you use</string>
-
+	<string name="current_stations_file">Current file:</string>
+	<string name="menu_save_as">Save copy as</string>
+	
+	<string name="title_file_preferece_activity">File Chooser</string>
+	<string name="filechooser_folder">Folder</string>
+	<string name="filechooser_parent_directory">Parent Directory</string>
+	<string name="filechooser_load_failed">Could not load Stations File</string>
+	<string name="filechooser_file_size">"File Size: "</string>
+	<string name="filechooser_save_hint">This will save a copy of your stations file in the current folder.</string>
+	<string name="menu_sel_stationsfile">Select stations file</string>
+	<string name="error_loading_stations_file">Error loading stations file</string>
 </resources>

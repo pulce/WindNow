@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -21,7 +20,7 @@ import android.view.MenuItem;
  * 
  * It allows to adjust user settings.
  * 
- * @author Florian Hauser Copyright (C) 2014
+ * @author Florian Hauser Copyright (C) 2015
  * 
  *         This program is free software: you can redistribute it and/or modify
  *         it under the terms of the GNU General Public License as published by
@@ -39,6 +38,8 @@ import android.view.MenuItem;
 public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
+	SharedPreferences prefs;
+
 	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
@@ -48,44 +49,45 @@ public class SettingsActivity extends PreferenceActivity implements
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		addPreferencesFromResource(R.xml.pref_general);
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(this);
-		Preference p = findPreference("user_dir");
-		EditTextPreference editTextPref = (EditTextPreference) p;
-		p.setSummary(getString(R.string.pref_dialog_sum_dir) + " "
-				+ editTextPref.getText());
 		Preference q = findPreference("pref_list");
 		ListPreference listPref = (ListPreference) q;
-		q.setSummary(getString(R.string.maximum_number_summary) + " " + listPref.getValue());
+		q.setSummary(getString(R.string.maximum_number_summary) + " "
+				+ listPref.getValue());
+
+		Preference filePref = (Preference) findPreference("stations_file");
+		filePref.setSummary(getString(R.string.current_stations_file) + " "
+				+ prefs.getString("stations_file", "stations.txt"));
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			Intent intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Resume saved
-																// State!
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			NavUtils.navigateUpTo(this, intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// Set up a listener whenever a key changes
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(this);
+		Preference filePref = (Preference) findPreference("stations_file");
+		filePref.setSummary(getString(R.string.current_stations_file) + " "
+				+ prefs.getString("stations_file", "stations.txt"));
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// Unregister the listener whenever a key changes
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		prefs.unregisterOnSharedPreferenceChangeListener(this);
@@ -102,13 +104,9 @@ public class SettingsActivity extends PreferenceActivity implements
 			MainActivity.maxRetries = Integer.parseInt(prefs.getString(
 					"pref_list", "5"));
 			ListPreference listPref = (ListPreference) p;
-			p.setSummary(getString(R.string.maximum_number_summary) + " " + listPref.getValue());
-		}
-		if (p.getKey().equals("user_dir") && p instanceof EditTextPreference) {
-			LoadSaveOps.userDir = prefs.getString("user_dir", "WindNow");
-			EditTextPreference editTextPref = (EditTextPreference) p;
-			p.setSummary(getString(R.string.pref_dialog_sum_dir) + " "
-					+ editTextPref.getText());
+			p.setSummary(getString(R.string.maximum_number_summary) + " "
+					+ listPref.getValue());
 		}
 	}
+
 }

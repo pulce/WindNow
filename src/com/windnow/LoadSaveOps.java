@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
@@ -27,7 +28,7 @@ import android.util.Log;
  * It is responsible for writing and loading the stations file. Also for writing
  * the error log.
  * 
- * @author Florian Hauser Copyright (C) 2014
+ * @author Florian Hauser Copyright (C) 2015
  * 
  *         This program is free software: you can redistribute it and/or modify
  *         it under the terms of the GNU General Public License as published by
@@ -45,50 +46,49 @@ import android.util.Log;
 
 @SuppressLint("SimpleDateFormat")
 public class LoadSaveOps {
-	public static String userDir = PreferenceManager.getDefaultSharedPreferences(
-			OnlyContext.getContext()).getString("user_dir", "WindNow");;
-	private static File localDir = new File(Environment
-			.getExternalStorageDirectory().getAbsolutePath() + "/" + userDir);
-	private static File stationsFile = new File(Environment
-			.getExternalStorageDirectory().getAbsolutePath()
-			+ "/"
-			+ userDir
-			+ "/" + "stations.txt");
-	private static File errorLogFile = new File(Environment
-			.getExternalStorageDirectory().getAbsolutePath()
-			+ "/"
-			+ userDir
-			+ "/" + "errorlog.txt");
 
+	private static SharedPreferences prefs = PreferenceManager
+			.getDefaultSharedPreferences(OnlyContext.getContext());
 	private static String sep = ";";
 
-	public static ArrayList<Station> loadStations() {
-		ArrayList<Station> stations = new ArrayList<Station>();
-		try {
-			mkLocalDir();
-			BufferedReader br = null;
-			boolean saveFile = !stationsFile.exists();
-			if (saveFile) {
-				AssetManager assetManager = OnlyContext.getContext()
-						.getAssets();
-				br = new BufferedReader(new InputStreamReader(
-						assetManager.open("stations.txt")));
-			} else {
-				br = new BufferedReader(new FileReader(stationsFile));
-			}
+	static File getStationsFile() {
+		return new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ "/"
+				+ prefs.getString("user_dir", "WindNow")
+				+ "/"
+				+ prefs.getString("stations_file", "stations.txt"));
+	}
 
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] arr = line.split(sep);
-				if (arr.length > 1)
-					stations.add(new Station(arr[0], arr[1]));
-			}
-			br.close();
-			if (saveFile) {
-				saveStations(stations);
-			}
-		} catch (Exception e) {
-			printErrorToLog(e);
+	static File getErrorFile() {
+		return new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ "/"
+				+ prefs.getString("user_dir", "WindNow") + "/errorlog.txt");
+	}
+
+	public static ArrayList<Station> loadStations() throws Exception {
+		ArrayList<Station> stations = new ArrayList<Station>();
+		mkLocalDir();
+		BufferedReader br = null;
+		boolean saveFile = !getStationsFile().exists();
+		if (saveFile) {
+			AssetManager assetManager = OnlyContext.getContext().getAssets();
+			br = new BufferedReader(new InputStreamReader(
+					assetManager.open("stations.txt")));
+		} else {
+			br = new BufferedReader(new FileReader(getStationsFile()));
+		}
+
+		String line;
+		while ((line = br.readLine()) != null) {
+			String[] arr = line.split(sep);
+			if (arr.length > 1)
+				stations.add(new Station(arr[0], arr[1]));
+		}
+		br.close();
+		if (saveFile) {
+			saveStations(stations);
 		}
 		return stations;
 	}
@@ -96,14 +96,16 @@ public class LoadSaveOps {
 	public static void saveStations(ArrayList<Station> stations) {
 		try {
 			mkLocalDir();
-			FileOutputStream fos = new FileOutputStream(stationsFile);
+			FileOutputStream fos = new FileOutputStream(getStationsFile());
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 			for (Station station : stations) {
 				bw.write(station.getName() + sep + station.getUrl());
 				bw.newLine();
 			}
 			bw.close();
-			MediaScannerConnection.scanFile(OnlyContext.getContext(), new String[] { stationsFile.getAbsolutePath() }, null, null);
+			MediaScannerConnection.scanFile(OnlyContext.getContext(),
+					new String[] { getStationsFile().getAbsolutePath() }, null,
+					null);
 		} catch (IOException e) {
 			printErrorToLog(e);
 		}
@@ -114,11 +116,12 @@ public class LoadSaveOps {
 			mkLocalDir();
 			boolean append = false;
 			SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
-			if (fmt.format(new Date(errorLogFile.lastModified())).equals(fmt.format(new Date()))) {
+			if (fmt.format(new Date(getErrorFile().lastModified())).equals(
+					fmt.format(new Date()))) {
 				append = true;
 			}
 			String line = Arrays.toString(e.getStackTrace());
-			FileOutputStream fos = new FileOutputStream(errorLogFile, append);
+			FileOutputStream fos = new FileOutputStream(getErrorFile(), append);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 			bw.write(sdf.format(new Date()) + "-------------");
@@ -128,18 +131,25 @@ public class LoadSaveOps {
 			bw.write(line);
 			bw.newLine();
 			bw.close();
-			MediaScannerConnection.scanFile(OnlyContext.getContext(), new String[] { errorLogFile.getAbsolutePath() }, null, null);
+			MediaScannerConnection.scanFile(OnlyContext.getContext(),
+					new String[] { getErrorFile().getAbsolutePath() }, null,
+					null);
 		} catch (IOException ex) {
 			Log.e("Error writing errorLog", ex.toString());
 		}
-		
+
 	}
-	
+
 	private static void mkLocalDir() {
+		File localDir = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ "/"
+				+ prefs.getString("user_dir", "WindNow"));
 		if (!localDir.exists()) {
 			localDir.mkdirs();
 		}
-		MediaScannerConnection.scanFile(OnlyContext.getContext(), new String[] { localDir.getAbsolutePath() }, null, null);
+		MediaScannerConnection.scanFile(OnlyContext.getContext(),
+				new String[] { localDir.getAbsolutePath() }, null, null);
 	}
 
 }

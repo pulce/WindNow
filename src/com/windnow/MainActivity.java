@@ -38,7 +38,7 @@ import android.widget.Toast;
  * 
  * It is the main activity.
  * 
- * @author Florian Hauser Copyright (C) 2014
+ * @author Florian Hauser Copyright (C) 2015
  * 
  *         This program is free software: you can redistribute it and/or modify
  *         it under the terms of the GNU General Public License as published by
@@ -57,9 +57,9 @@ import android.widget.Toast;
 @SuppressLint({ "InflateParams", "NewApi" })
 public class MainActivity extends ActionBarActivity {
 
-	private static final String VERSIONID = "1.1.3";
+	private static final String VERSIONID = "1.2.0";
 	private static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
-	
+
 	private StationListAdapter stAda;
 	private String sharedUrl = null;
 	public static int maxRetries;
@@ -67,7 +67,8 @@ public class MainActivity extends ActionBarActivity {
 	public static final int DIALOG_NEW_STAT = -1;
 	public static final int DIALOG_EDIT_STAT = -2;
 	public static final int DIALOG_SHARE_STAT = -3;
-	final ArrayList<Station> objects = new ArrayList<Station>();
+	public static final int ACT_PREF = 1;
+	static final ArrayList<Station> objects = new ArrayList<Station>();
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -77,7 +78,14 @@ public class MainActivity extends ActionBarActivity {
 		maxRetries = Integer.parseInt(PreferenceManager
 				.getDefaultSharedPreferences(OnlyContext.getContext())
 				.getString("pref_list", "5"));
-		objects.addAll(LoadSaveOps.loadStations());
+		try {
+			objects.addAll(LoadSaveOps.loadStations());
+		} catch (Exception e) {
+			LoadSaveOps.printErrorToLog(e);
+			Toast.makeText(this,
+					getString(R.string.error_loading_stations_file),
+					Toast.LENGTH_SHORT).show();
+		}
 		final ListView listview = (ListView) findViewById(R.id.listview);
 		stAda = new StationListAdapter(this, R.layout.main_list_item, objects);
 		listview.setAdapter(stAda);
@@ -131,13 +139,19 @@ public class MainActivity extends ActionBarActivity {
 		return true;
 	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACT_PREF) {
+			stAda.notifyDataSetChanged();
+		}
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
-			startActivity(new Intent(getApplicationContext(),
-					SettingsActivity.class));
+			startActivityForResult(new Intent(getApplicationContext(),
+					SettingsActivity.class), ACT_PREF);
 			break;
 		case R.id.action_help:
 			startActivity(new Intent(getApplicationContext(),
@@ -270,11 +284,13 @@ public class MainActivity extends ActionBarActivity {
 				return false;
 			}
 			if (tag.equals(VERSIONID)) {
-				answer = getString(R.string.already_latest_version) + " " + VERSIONID + ".";
+				answer = getString(R.string.already_latest_version) + " "
+						+ VERSIONID + ".";
 				return false;
 			}
-			answer = "Version " + tag + " " + getString(R.string.new_version_available) + " " + VERSIONID
-					+ ".";
+			answer = "Version " + tag + " "
+					+ getString(R.string.new_version_available) + " "
+					+ VERSIONID + ".";
 			return true;
 		}
 

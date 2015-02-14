@@ -48,7 +48,6 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
 1. Adresse und Name im \"neue Station\" Dialog in den Einstellungen eingeben.\n
 2. Durch Teilen einer Url oder einer Grafik in einem Browser.\n
 3. Durch Modifikation der (selbsterklärenden) \"stations\" Datei im \"WindNow\" Verzeichnis auf der sd-Karte.\n\n</string>
-    <string name="pref_title_dir">Wähle Verzeichnis für stations-Datei</string>
     <string name="create_the_new_station">Neue Station erstellen:</string>
     <string name="what_to_do">Was wollen Sie tun?</string>
     <string name="really_delete">Diese Station wirklich löschen?</string>
@@ -63,8 +62,6 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="could_not_parse">Konnte Daten nicht interpretieren. Falsche URL?</string>
     <string name="maximum_download_retries">Max. Anzahl Downloadversuche</string>
     <string name="maximum_number_summary">Derzeitige Anzahl:</string>
-    <string name="pref_dialog_title_dir">Benutzerverzeichnis auf SD-Karte</string>
-    <string name="pref_dialog_sum_dir">Derzeitiges Verzeichnis:</string>
     <string name="edit_station">Station bearbeiten</string>
     <string name="edit_the_station">Station bearbeiten</string>
     <string name="position_in_list">Position in Liste:</string>
@@ -72,5 +69,15 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="check_for_updates_failed">Suche nach Updates fehlgeschlagen.</string>
     <string name="already_latest_version">Sie verwenden die aktuellste Version</string>
     <string name="new_version_available">ist verfügbar, Sie benutzen</string>
-    
+	<string name="current_stations_file">Derzeitige Datei:</string>
+	<string name="menu_save_as">Kopie speichern unter</string>
+	
+	<string name="title_file_preferece_activity">File Chooser</string>
+	<string name="filechooser_folder">Ordner</string>
+	<string name="filechooser_parent_directory">Übergeordnetes Verzeichnis</string>
+	<string name="filechooser_load_failed">Konnte Stations Datei nicht laden</string>
+	<string name="filechooser_file_size">"Dateigröße: "</string>
+	<string name="filechooser_save_hint">Speichert eine Kopie der Stations Datei an diesem Ort.</string>
+	<string name="menu_sel_stationsfile">Stations Datei wählen</string>
+	<string name="error_loading_stations_file">Fehler beim Lader der Stations Datei</string>
 </resources>
