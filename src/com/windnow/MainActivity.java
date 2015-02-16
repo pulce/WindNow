@@ -57,7 +57,7 @@ import android.widget.Toast;
 @SuppressLint({ "InflateParams", "NewApi" })
 public class MainActivity extends ActionBarActivity {
 
-	private static final String VERSIONID = "1.2.0";
+	private static final String VERSIONID = "1.2.1";
 	private static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 
 	private StationListAdapter stAda;
@@ -78,13 +78,15 @@ public class MainActivity extends ActionBarActivity {
 		maxRetries = Integer.parseInt(PreferenceManager
 				.getDefaultSharedPreferences(OnlyContext.getContext())
 				.getString("pref_list", "5"));
-		try {
-			objects.addAll(LoadSaveOps.loadStations());
-		} catch (Exception e) {
-			LoadSaveOps.printErrorToLog(e);
-			Toast.makeText(this,
-					getString(R.string.error_loading_stations_file),
-					Toast.LENGTH_SHORT).show();
+		if (objects.size() == 0) {
+			try {
+				objects.addAll(LoadSaveOps.loadStations());
+			} catch (Exception e) {
+				LoadSaveOps.printErrorToLog(e);
+				Toast.makeText(this,
+						getString(R.string.error_loading_stations_file),
+						Toast.LENGTH_SHORT).show();
+			}
 		}
 		final ListView listview = (ListView) findViewById(R.id.listview);
 		stAda = new StationListAdapter(this, R.layout.main_list_item, objects);
