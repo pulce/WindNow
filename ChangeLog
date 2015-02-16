@@ -25,3 +25,7 @@ Include stations that deliver data only every 6 hours
 
 V1.2.0------------------
 - FileChooser replaces userdirpreference
+
+V1.2.1------------------
+Bugfixing:
+Stations appear several times.
