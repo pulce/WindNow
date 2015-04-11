@@ -1,10 +1,15 @@
-package com.windnow;
+package com.windnow.preferences;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+
+import com.windnow.MainActivity;
+import com.windnow.R;
+import com.windnow.Station;
+import com.windnow.statics.LoadSaveOps;
 
 import android.os.Build;
 import android.os.Bundle;

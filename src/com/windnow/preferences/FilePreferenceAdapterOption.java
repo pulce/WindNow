@@ -1,4 +1,4 @@
-package com.windnow;
+package com.windnow.preferences;
 
 import java.util.Locale;
 

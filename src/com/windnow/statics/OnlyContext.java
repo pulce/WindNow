@@ -1,17 +1,14 @@
-package com.windnow;
+package com.windnow.statics;
 
-import android.app.Dialog;
+import android.app.Application;
 import android.content.Context;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
+import android.util.Log;
 
 /**
  * 
  * This Class is part of WindNow.
  * 
- * It adds an About Dialog to the given context.
+ * It is responsible for providing context.
  * 
  * @author Florian Hauser Copyright (C) 2014
  * 
@@ -28,24 +25,33 @@ import android.widget.TextView;
  *         You should have received a copy of the GNU General Public License
  *         along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-public class AboutDialog {
+public class OnlyContext extends Application {
 
-	public static void makeDialog(Context context, String versionID) {
-		final Dialog dialog = new Dialog(context);
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.setContentView(R.layout.about);
-		dialog.setTitle(dialog.getContext().getString(R.string.about));
+	private static Context mContext;
 
-		TextView text = (TextView) dialog.findViewById(R.id.text);
-		text.setText("WindNow Version " + versionID);
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mContext = this;
+	}
 
-		Button confirmButton = (Button) dialog.findViewById(R.id.confButton);
-		confirmButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
-		dialog.show();
+	public static Context getContext() {
+		return mContext;
+	}
+
+	/**
+	 * Method to access Android resource strings.
+	 * @param key
+	 * @return
+	 */
+	public static String rString(String key) {
+		int nam = mContext.getResources().getIdentifier(key, "string",
+				mContext.getPackageName());
+		try {
+		return mContext.getString(nam);
+		} catch (Exception e) {
+			Log.e("String not found", e.toString());
+			return "";
+		}
 	}
 }

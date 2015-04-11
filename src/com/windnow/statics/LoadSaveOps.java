@@ -1,4 +1,4 @@
-package com.windnow;
+package com.windnow.statics;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+
+import com.windnow.Station;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
@@ -68,8 +70,16 @@ public class LoadSaveOps {
 	}
 
 	public static ArrayList<Station> loadStations() throws Exception {
-		ArrayList<Station> stations = new ArrayList<Station>();
 		mkLocalDir();
+		//Manage Cache
+		File[] files = OnlyContext.getContext().getFilesDir().listFiles();
+		long now = System.currentTimeMillis();
+		for (File fl:files) {
+			if (now - fl.lastModified() > 1000L*60*60*24*90) {
+				fl.delete();
+			}
+		}
+		ArrayList<Station> stations = new ArrayList<Station>();
 		BufferedReader br = null;
 		boolean saveFile = !getStationsFile().exists();
 		if (saveFile) {
@@ -111,7 +121,7 @@ public class LoadSaveOps {
 		}
 	}
 
-	static void printErrorToLog(Exception e) {
+	public static void printErrorToLog(Exception e) {
 		try {
 			mkLocalDir();
 			boolean append = false;

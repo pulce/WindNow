@@ -1,34 +1,32 @@
 package com.windnow;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
-import android.support.v7.app.ActionBarActivity;
+
+import com.windnow.classes.AboutDialog;
+import com.windnow.classes.CheckForUpdates;
+import com.windnow.classes.DownloadStation;
+import com.windnow.classes.InterfaceDlUpdate;
+import com.windnow.preferences.SettingsActivity;
+import com.windnow.statics.LoadSaveOps;
+
+import android.support.v4.app.FragmentActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,84 +53,79 @@ import android.widget.Toast;
  */
 
 @SuppressLint({ "InflateParams", "NewApi" })
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity implements
+		InterfaceDlUpdate, MainFragment.Callbacks {
 
-	private static final String VERSIONID = "1.2.1";
-	private static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
+	public static final String VERSIONID = "2.0.0";
+	public static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 
-	private StationListAdapter stAda;
 	private String sharedUrl = null;
-	public static int maxRetries;
 	private static int stationToEdit;
 	public static final int DIALOG_NEW_STAT = -1;
 	public static final int DIALOG_EDIT_STAT = -2;
 	public static final int DIALOG_SHARE_STAT = -3;
 	public static final int ACT_PREF = 1;
-	static final ArrayList<Station> objects = new ArrayList<Station>();
+	public static final int ACT_STATION = 2;
+	public static final ArrayList<Station> objects = new ArrayList<Station>();
+
+	private static final String LIST_STATE = "listState";
+
+	private boolean mTwoPane;
+	private Station activeStation;
+	private Parcelable savedListState = null;
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		maxRetries = Integer.parseInt(PreferenceManager
-				.getDefaultSharedPreferences(OnlyContext.getContext())
-				.getString("pref_list", "5"));
-		if (objects.size() == 0) {
-			try {
-				objects.addAll(LoadSaveOps.loadStations());
-			} catch (Exception e) {
-				LoadSaveOps.printErrorToLog(e);
-				Toast.makeText(this,
-						getString(R.string.error_loading_stations_file),
-						Toast.LENGTH_SHORT).show();
-			}
+		setContentView(R.layout.activity_main_list);
+
+		if (findViewById(R.id.station_container) != null) {
+			mTwoPane = true;
 		}
-		final ListView listview = (ListView) findViewById(R.id.listview);
-		stAda = new StationListAdapter(this, R.layout.main_list_item, objects);
-		listview.setAdapter(stAda);
-		listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, final View view,
-					int position, long id) {
-				if (objects.get(position).isvalued()) {
-					Intent sText = objects.get(position).getType() == Station.PIC ? new Intent(
-							getApplicationContext(), StationPicActivity.class)
-							: new Intent(getApplicationContext(),
-									StationTextActivity.class);
-					sText.putExtra("txt", objects.get(position).getUrl());
-					sText.putExtra(
-							"name",
-							objects.get(position).getName()
-									+ "\n"
-									+ getString(R.string.downloaded_at)
-									+ Station.sdf.format(objects.get(position)
-											.getDate()));
-					sText.putStringArrayListExtra("tabTxt",
-							objects.get(position).getTabTxt());
-					startActivity(sText);
-				}
-			}
-		});
-
-		listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				showDialog(position);
-				return true;
-			}
-
-		});
 
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		String type = intent.getType();
-
 		if (Intent.ACTION_SEND.equals(action) && type != null) {
 			sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
 			showDialog(DIALOG_SHARE_STAT);
 		}
+	}
+
+	/**
+	 * Method needed to restore scroll position
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle state) {
+		super.onRestoreInstanceState(state);
+		savedListState = state.getParcelable(LIST_STATE);
+	}
+
+	/**
+	 * Method needed to restore scroll position
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (savedListState != null) {
+			((MainFragment) getSupportFragmentManager().findFragmentById(
+					R.id.main_list)).getListView().onRestoreInstanceState(
+					savedListState);
+		}
+		savedListState = null;
+	}
+
+	/**
+	 * Method needed to restore scroll position
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle state) {
+		super.onSaveInstanceState(state);
+		savedListState = ((MainFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.main_list)).getListView()
+				.onSaveInstanceState();
+		state.putParcelable(LIST_STATE, savedListState);
 	}
 
 	@Override
@@ -141,9 +134,34 @@ public class MainActivity extends ActionBarActivity {
 		return true;
 	}
 
+	private void refreshView() {
+		MainFragment fragment = (MainFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.main_list);
+		if (fragment != null && fragment.isInLayout()) {
+			fragment.refreshAdapter();
+		}
+	}
+	
+	private void refreshDetail(Station st) {
+		StationFragment stfragment = (StationFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.station_container);
+		if (stfragment != null && st == activeStation && mTwoPane) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("position", objects.indexOf(st));
+			Log.d("Replacing....", activeStation.getName());
+			StationFragment frag = new StationFragment();
+			frag.setArguments(bundle);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.station_container, frag).commit();
+		}
+
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == ACT_PREF) {
-			stAda.notifyDataSetChanged();
+			refreshView();
+		} else if (requestCode == ACT_STATION) {
+			
 		}
 	}
 
@@ -166,12 +184,12 @@ public class MainActivity extends ActionBarActivity {
 			showDialog(DIALOG_NEW_STAT);
 			break;
 		case R.id.action_refresh:
-			for (Station st : objects) {
+			for (Station st : getObjects()) {
 				initiateDl(st);
 			}
 			break;
 		case R.id.action_update:
-			new CheckForUpdates().execute(VERSIONID);
+			new CheckForUpdates(this).execute(VERSIONID);
 			break;
 		default:
 			break;
@@ -185,127 +203,25 @@ public class MainActivity extends ActionBarActivity {
 		}
 		st.setLoaded(false);
 		st.setStatus(Station.DOWNLOADING);
-		stAda.notifyDataSetChanged();
+		refreshView();
+		// stAda.notifyDataSetChanged();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			new DownloadStation(st)
+			new DownloadStation(this, st)
 					.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
-			new DownloadStation(st).execute();
+			new DownloadStation(this, st).execute();
 		}
 	}
 
-	/**
-	 * 
-	 * AsyncTask to download the content...
-	 *
-	 */
-	private class DownloadStation extends AsyncTask<Void, Void, Void> {
-		private Station station;
-
-		private DownloadStation(Station station) {
-			this.station = station;
-		}
-
-		@Override
-		protected Void doInBackground(Void... v) {
-			for (int dlTry = 1; dlTry <= maxRetries; dlTry++) {
-				try {
-					station.setProgress(0);
-					String filename = "pic" + station.getUrl().hashCode();
-					int IO_BUFFER_SIZE = 4 * 1024;
-					URLConnection uc = new URL(station.getUrl())
-							.openConnection();
-					int contentLength = uc.getContentLength();
-					InputStream input = new BufferedInputStream(
-							uc.getInputStream(), IO_BUFFER_SIZE);
-					OutputStream out = new BufferedOutputStream(OnlyContext
-							.getContext().openFileOutput(filename,
-									OnlyContext.MODE_PRIVATE), IO_BUFFER_SIZE);
-					byte[] b = new byte[IO_BUFFER_SIZE];
-					int read;
-					long total = 0;
-					while ((read = input.read(b)) != -1) {
-						total += read;
-						if (contentLength > 0) {
-							station.setProgress((int) ((total * 100) / contentLength));
-							publishProgress();
-						}
-						out.write(b, 0, read);
-					}
-					input.close();
-					out.close();
-
-					station.setLoaded(true);
-					station.setValued(true);
-					station.setStatus(Station.LOADED);
-					station.setDate(Calendar.getInstance().getTime());
-
-					if (station.getType() != Station.PIC) {
-						station.parseCache();
-					}
-					break;
-				} catch (IOException e) {
-					if (dlTry == maxRetries) {
-						station.setStatus(Station.DOWNLOAD_ERROR);
-					}
-					LoadSaveOps.printErrorToLog(e);
-					e.printStackTrace();
-				}
-			}
-			return null;
-		}
-
-		protected void onProgressUpdate(Void... p) {
-			stAda.notifyDataSetChanged();
-		}
-
-		@Override
-		protected void onPostExecute(Void v) {
-			stAda.notifyDataSetChanged();
-		}
+	@Override
+	public void onTaskUpdate(Station st) {
+		refreshView();
 	}
 
-	private class CheckForUpdates extends AsyncTask<String, Void, Boolean> {
-		private String answer = getString(R.string.check_for_updates_failed);
-
-		@Override
-		protected Boolean doInBackground(String... org) {
-			String tag;
-			try {
-				URLConnection con = new URL(APPURL).openConnection();
-				con.connect();
-				InputStream is = con.getInputStream();
-				String gt = con.getURL().toString();
-				if (gt == null) {
-					return false;
-				}
-				String[] spl = gt.split("/");
-				tag = spl[spl.length - 1];
-				is.close();
-			} catch (IOException e) {
-				return false;
-			}
-			if (tag.equals(VERSIONID)) {
-				answer = getString(R.string.already_latest_version) + " "
-						+ VERSIONID + ".";
-				return false;
-			}
-			answer = "Version " + tag + " "
-					+ getString(R.string.new_version_available) + " "
-					+ VERSIONID + ".";
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(Boolean newVersion) {
-			Toast.makeText(getApplicationContext(), answer, Toast.LENGTH_LONG)
-					.show();
-			if (newVersion) {
-				Intent browse = new Intent(Intent.ACTION_VIEW,
-						Uri.parse(APPURL));
-				startActivity(browse);
-			}
-		}
+	@Override
+	public void onTaskResult(Station st) {
+		refreshView();
+		refreshDetail(st);
 	}
 
 	@Override
@@ -339,7 +255,7 @@ public class MainActivity extends ActionBarActivity {
 		final AlertDialog alertDialog = (AlertDialog) dialog;
 		final boolean edit = id == DIALOG_EDIT_STAT;
 		final boolean share = id == DIALOG_SHARE_STAT;
-		int position = objects.size();
+		int position = getObjects().size();
 		switch (id) {
 		case DIALOG_SHARE_STAT:
 		case DIALOG_EDIT_STAT:
@@ -349,8 +265,8 @@ public class MainActivity extends ActionBarActivity {
 			final EditText stationUrl = (EditText) alertDialog
 					.findViewById(R.id.newStationUrl);
 			if (edit) {
-				stationName.setText(objects.get(stationToEdit).getName());
-				stationUrl.setText(objects.get(stationToEdit).getUrl());
+				stationName.setText(getObjects().get(stationToEdit).getName());
+				stationUrl.setText(getObjects().get(stationToEdit).getUrl());
 				position = stationToEdit;
 			}
 			if (share) {
@@ -360,7 +276,8 @@ public class MainActivity extends ActionBarActivity {
 			final Spinner dropdown = (Spinner) alertDialog
 					.findViewById(R.id.spinner1);
 			ArrayList<Integer> items = new ArrayList<Integer>();
-			for (int i = 1; i <= (edit ? objects.size() : objects.size() + 1); i++) {
+			for (int i = 1; i <= (edit ? getObjects().size() : getObjects()
+					.size() + 1); i++) {
 				items.add(i);
 			}
 			ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this,
@@ -374,18 +291,19 @@ public class MainActivity extends ActionBarActivity {
 				public void onClick(View v) {
 					Station newStation;
 					if (edit) {
-						newStation = objects.get(stationToEdit);
+						newStation = getObjects().get(stationToEdit);
 						newStation.setName(stationName.getText().toString());
 						newStation.setUrl(stationUrl.getText().toString());
-						objects.remove(newStation);
+						getObjects().remove(newStation);
 					} else {
 						newStation = new Station(stationName.getText()
 								.toString(), stationUrl.getText().toString());
 					}
-					objects.add((Integer) dropdown.getSelectedItem() - 1,
+					getObjects().add((Integer) dropdown.getSelectedItem() - 1,
 							newStation);
-					stAda.notifyDataSetChanged();
-					LoadSaveOps.saveStations(objects);
+					refreshView();
+					// stAda.notifyDataSetChanged();
+					LoadSaveOps.saveStations(getObjects());
 					alertDialog.dismiss();
 				}
 			});
@@ -403,11 +321,12 @@ public class MainActivity extends ActionBarActivity {
 			Button refButton = (Button) alertDialog.findViewById(R.id.refresh);
 			Button editButton = (Button) alertDialog.findViewById(R.id.edit_st);
 			Button delButton = (Button) alertDialog.findViewById(R.id.delete);
+			Button fullButton = (Button) alertDialog.findViewById(R.id.fullscreen);
 			refButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					alertDialog.dismiss();
-					initiateDl(objects.get(id));
+					initiateDl(getObjects().get(id));
 				}
 			});
 			editButton.setOnClickListener(new View.OnClickListener() {
@@ -427,9 +346,9 @@ public class MainActivity extends ActionBarActivity {
 						public void onClick(DialogInterface dialog, int which) {
 							switch (which) {
 							case DialogInterface.BUTTON_POSITIVE:
-								objects.remove(id);
-								LoadSaveOps.saveStations(objects);
-								stAda.notifyDataSetChanged();
+								getObjects().remove(id);
+								LoadSaveOps.saveStations(getObjects());
+								refreshView();
 								break;
 							case DialogInterface.BUTTON_NEGATIVE:
 								break;
@@ -446,7 +365,62 @@ public class MainActivity extends ActionBarActivity {
 					alertDialog.dismiss();
 				}
 			});
+			if (fullButton != null) {
+			fullButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					alertDialog.dismiss();
+					Bundle bundle = new Bundle();
+					bundle.putInt("position", id);
+					Intent sText = new Intent(getApplicationContext(),
+							StationActivity.class);
+					sText.putExtras(bundle);
+					startActivity(sText);
+				}
+			});
+			}
 			break;
 		}
+	}
+
+	@Override
+	public void onItemSelected(Station st) {
+		if (st.isvalued()) {
+			activeStation = st;
+			Bundle bundle = new Bundle();
+			bundle.putInt("position", getObjects().indexOf(st));
+			if (mTwoPane) {
+				StationFragment fragment = new StationFragment();
+				fragment.setArguments(bundle);
+				getSupportFragmentManager().beginTransaction()
+						.replace(R.id.station_container, fragment).commit();
+			} else {
+				Intent sText = new Intent(getApplicationContext(),
+						StationActivity.class);
+				sText.putExtras(bundle);
+				startActivityForResult(sText, 0);
+			}
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void OnItemLongClicked(int position) {
+		showDialog(position);
+	}
+
+	@Override
+	public ArrayList<Station> getObjects() {
+		if (objects.size() == 0) {
+			try {
+				objects.addAll(LoadSaveOps.loadStations());
+			} catch (Exception e) {
+				LoadSaveOps.printErrorToLog(e);
+				Toast.makeText(this,
+						getString(R.string.error_loading_stations_file),
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+		return objects;
 	}
 }

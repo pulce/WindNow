@@ -1,6 +1,8 @@
-package com.windnow;
+package com.windnow.preferences;
 
 import java.util.List;
+
+import com.windnow.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;

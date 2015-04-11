@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.windnow.StationActivity" >
+
+    <item
+        android:id="@+id/action_hot_refresh"
+        android:orderInCategory="100"
+        android:title="@string/diag_refresh_station"
+        app:showAsAction="never"/>
+
+</menu>

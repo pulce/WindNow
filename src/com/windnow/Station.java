@@ -13,6 +13,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.windnow.statics.LoadSaveOps;
+import com.windnow.statics.OnlyContext;
+
 /**
  * 
  * This Class is part of WindNow.
@@ -80,9 +83,13 @@ public class Station implements Comparable<Station> {
 		// Check loaded
 		String filename = "pic" + this.url.hashCode();
 		File file = OnlyContext.getContext().getFileStreamPath(filename);
+		long now = System.currentTimeMillis();
 		if (file != null && file.exists()) {
 			this.date = new Date(file.lastModified());
 			this.status = LOADED;
+			if (now - file.lastModified() < 1000L*60*60*24) {
+				this.loaded = true;
+			}
 			if (this.type != PIC) {
 				parseCache();
 			}

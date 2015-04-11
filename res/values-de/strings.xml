@@ -14,7 +14,7 @@
     <string name="title_activity_station_pic">Station</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="authors_note">        Contact: pulce@gmx.at \n
-        Copyright 2014 \n
+        Copyright 2015 \n
         by Florian Hauser</string>
     <string name="legal_notice">    Dependencies:\n
     jsoup - http://jsoup.org/ \n
@@ -53,6 +53,7 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="really_delete">Diese Station wirklich löschen?</string>
     <string name="diag_refresh_station">Station neu laden</string>
     <string name="diag_delete_station">Station löschen</string>
+	<string name="diag_station_full_screen">Station maximieren</string>
     <string name="not_loaded">Nicht geladen</string>
     <string name="downloaded_at">"Geladen: "</string>
     <string name="title_activity_help">Hilfe</string>

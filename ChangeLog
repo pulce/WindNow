@@ -29,3 +29,11 @@ V1.2.0------------------
 V1.2.1------------------
 Bugfixing:
 Stations appear several times.
+
+V2.0.0------------------
+- User Interface: swype stations
+- User Interface: two-column-layout on wide screens
+- Cache management: old (unused) pic files get deleted
+- Windsock of a station is now colored if and only if download is younger than 1 day
+- Refresh visible station with menu button
+- Code cleanup

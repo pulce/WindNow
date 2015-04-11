@@ -6,7 +6,7 @@
         android:title="@string/menu_sel_stationsfile" >
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.windnow.FilePreferenceActivity"
+            android:targetClass="com.windnow.preferences.FilePreferenceActivity"
             android:targetPackage="com.windnow" />
     </Preference>
 

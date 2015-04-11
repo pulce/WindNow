@@ -2,6 +2,8 @@ package com.windnow;
 
 import java.util.List;
 
+import com.windnow.statics.OnlyContext;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,7 +59,7 @@ public class StationListAdapter extends ArrayAdapter<Station> {
 	public Station getItem(int i) {
 		return objects.get(i);
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;

@@ -1,4 +1,7 @@
-package com.windnow;
+package com.windnow.preferences;
+
+import com.windnow.MainActivity;
+import com.windnow.R;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -97,12 +100,8 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
 		Preference p = findPreference(key);
 		if (p.getKey().equals("pref_list") && p instanceof ListPreference) {
-			MainActivity.maxRetries = Integer.parseInt(prefs.getString(
-					"pref_list", "5"));
 			ListPreference listPref = (ListPreference) p;
 			p.setSummary(getString(R.string.maximum_number_summary) + " "
 					+ listPref.getValue());
