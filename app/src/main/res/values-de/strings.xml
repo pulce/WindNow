@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="about">Über diese App</string>
+    <string name="about_close_button">Schließen</string>
+    <string name="action_about">Über diese App</string>
+    <string name="app_name">WindNow</string>
+    <string name="dialog_uname">Name für neue Station</string>
+    <string name="dialog_url">URL für neue Station</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_new_station">Neue Station erstellen</string>
+    <string name="action_refresh">Alle Stationen neu laden</string>
+    <string name="title_activity_station_text">Station</string>
+    <string name="title_activity_station_pic">Station</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="authors_note">        Contact: pulce@gmx.at \n
+        Copyright 2015 \n
+        by Florian Hauser</string>
+    <string name="legal_notice">    Dependencies:\n
+    jsoup - http://jsoup.org/ \n
+    \n
+    License: \n  
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version. \n
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details. \n
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses/.</string>
+    <string name="help_string">WindNow\n\n
+            Diese App verwaltet Wind- (oder Wetter-) stationen mit Fokus auf geringem Datentransfer.
+            Folgende Typen von Stationen sind vorgesehen:\n
+            &#8226; einzelne Bilder mit einer statischen Internetadresse.\n
+            &#8226; Stationen die von wetteronline.com unter \"aktuelles Wetter\" ausgegeben werden.\n
+            &#8226; Stationen die von wetterdienst.de unter \"Aktuell\" ausgegeben werden.\n
+            &#8226; Wetterstationen Berg / Tal von http://www.provinz.bz.it/wetter/wetterstationen.asp.\n\n
+
+Um eine Station (neu) zu laden können entweder alle Stationen gleichzeitig über den Menüpunkt in den Einstellungen 
+aktualisiert werden, oder einzeln per langem Klick auf die Station in der Liste. Das Löschen und Bearbeiten von Stationen
+ist ebenfalls über einen langen Klick möglich.\n\n
+ 
+Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
+1. Adresse und Name im \"neue Station\" Dialog in den Einstellungen eingeben.\n
+2. Durch Teilen einer Url oder einer Grafik in einem Browser.\n
+3. Durch Modifikation der (selbsterklärenden) \"stations\" Datei im \"WindNow\" Verzeichnis auf der sd-Karte.\n\n</string>
+    <string name="create_the_new_station">Neue Station erstellen:</string>
+    <string name="really_delete">Diese Station wirklich löschen?</string>
+    <string name="diag_refresh_station">Station neu laden</string>
+    <string name="diag_delete_station">Station löschen</string>
+	<string name="diag_station_full_screen">Station maximieren</string>
+    <string name="not_loaded">Nicht geladen</string>
+    <string name="downloaded_at">"Geladen: "</string>
+    <string name="title_activity_help">Hilfe</string>
+    <string name="action_help">Hilfe</string>
+    <string name="downloading">Download gestartet</string>
+    <string name="download_error">Fehler beim Download</string>
+    <string name="could_not_parse">Konnte Daten nicht interpretieren. Falsche URL?</string>
+    <string name="maximum_download_retries">Max. Anzahl Downloadversuche</string>
+    <string name="maximum_number_summary">Derzeitige Anzahl:</string>
+    <string name="edit_station">Station bearbeiten</string>
+    <string name="edit_the_station">Station bearbeiten</string>
+    <string name="position_in_list">Position in Liste:</string>
+    <string name="check_for_updates">Auf Updates prüfen</string>
+    <string name="check_for_updates_failed">Suche nach Updates fehlgeschlagen.</string>
+    <string name="already_latest_version">Sie verwenden die aktuellste Version</string>
+    <string name="new_version_available">ist verfügbar, Sie benutzen</string>
+	<string name="current_stations_file">Derzeitige Datei:</string>
+	<string name="menu_save_as">Kopie speichern unter</string>
+	
+	<string name="title_file_preferece_activity">File Chooser</string>
+	<string name="filechooser_folder">Ordner</string>
+	<string name="filechooser_parent_directory">Übergeordnetes Verzeichnis</string>
+	<string name="filechooser_load_failed">Konnte Stations Datei nicht laden</string>
+	<string name="filechooser_file_size">"Dateigröße: "</string>
+	<string name="filechooser_save_hint">Speichert eine Kopie der Stations Datei an diesem Ort.</string>
+	<string name="menu_sel_stationsfile">Stations Datei wählen</string>
+	<string name="error_loading_stations_file">Fehler beim Lader der Stations Datei</string>
+    <string name="successfully_saved">"Erfolgreich gespeichert: "</string>
+    <string name="drawer_close">Navigation schließen</string>
+    <string name="drawer_open">Navigation öffnen</string>
+</resources>

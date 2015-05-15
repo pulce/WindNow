@@ -2,6 +2,20 @@
 .settings
 launcher*
 bin/
+gen/
 libs/
-drawable/
+drawable*/
+mipmap*/
 lint.xml
+
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/*/build/
+
+#built application files
+*.apk
+*.ap_
+*.class
