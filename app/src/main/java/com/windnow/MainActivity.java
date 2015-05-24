@@ -63,7 +63,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements
         InterfaceDlUpdate, MainFragment.Callbacks {
 
-    public static final String VERSIONID = "2.1.0";
+    public static final String VERSIONID = "2.1.0"; 
     public static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 
     private String sharedUrl = null;
