@@ -19,7 +19,7 @@
         jar="/home/pulce/InSync/WindNow/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="92d48d6614b7fbc49cfc3c67b60c04b8c1790670">
+        sha1="efd003e935839a90bdee07d92fa1ccf62312783b">
         <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_ddf6d5604b1ab20917fcda197d0b71e4fb492e91/classes.dex" />
     </item>
     <item
@@ -40,7 +40,7 @@
         jar="/home/pulce/InSync/WindNow/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="5b6d83b9f39bc1cc58d951dfe464652a659550b1">
+        sha1="8dc0d425afe33a9ea0217cd89ac922860e2190e7">
         <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_d26e8e0794bc1209c99c9a72cc21c967e4d7027e/classes.dex" />
     </item>
     <item

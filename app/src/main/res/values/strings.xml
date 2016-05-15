@@ -39,7 +39,8 @@
             &#8226; a single image with a static url.\n
             &#8226; a station provided by wetteronline.com as \"aktuelles Wetter\".\n
 			&#8226; a station provided by wetterdienst.de as \"Aktuell\".\n
-            &#8226; mountain / valley stations of http://www.provinz.bz.it/wetter/wetterstationen.asp.\n\n
+            &#8226; mountain / valley stations of http://www.provinz.bz.it/wetter/wetterstationen.asp.\n
+            &#8226; forecast of http://www.flug-wetter.at/alptherm/vorhersage.html. This requires valid user data in the apps menu. \n\n
  
 To load (or refresh) data for a station either refresh all stations from the settings menu, or long-click 
 a station in the list for a selective refresh. Deleting and editing a station is possible by long-clicking.\n\n

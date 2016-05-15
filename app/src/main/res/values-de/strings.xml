@@ -39,7 +39,8 @@
             &#8226; einzelne Bilder mit einer statischen Internetadresse.\n
             &#8226; Stationen die von wetteronline.com unter \"aktuelles Wetter\" ausgegeben werden.\n
             &#8226; Stationen die von wetterdienst.de unter \"Aktuell\" ausgegeben werden.\n
-            &#8226; Wetterstationen Berg / Tal von http://www.provinz.bz.it/wetter/wetterstationen.asp.\n\n
+            &#8226; Wetterstationen Berg / Tal von http://www.provinz.bz.it/wetter/wetterstationen.asp.\n
+            &#8226; Vorhersagetexte von http://www.flug-wetter.at/alptherm/vorhersage.html. Dazu müssen Zugangsdaten im Menü der App hinterlegt werden. \n\n
 
 Um eine Station (neu) zu laden können entweder alle Stationen gleichzeitig über den Menüpunkt in den Einstellungen 
 aktualisiert werden, oder einzeln per langem Klick auf die Station in der Liste. Das Löschen und Bearbeiten von Stationen
