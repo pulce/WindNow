@@ -56,12 +56,12 @@ public class StationActivity extends AppCompatActivity implements
 		mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
-				setTitle(MainActivity.objects.get(position).getName());
+				setTitle(MainActivity.getStaticObjects(StationActivity.this).get(position).getName());
 			}
 		});
 		mPager.setCurrentItem(getIntent().getExtras().getInt("position"));
 		mPagerAdapter.notifyDataSetChanged();
-		setTitle(MainActivity.objects.get(getIntent().getExtras().getInt("position")).getName());
+		setTitle(MainActivity.getStaticObjects(this).get(getIntent().getExtras().getInt("position")).getName());
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class StationActivity extends AppCompatActivity implements
 			//NavUtils.navigateUpTo(this, intent);
 			//return true;
 		case R.id.action_hot_refresh:
-			Station st = MainActivity.objects.get(mPager.getCurrentItem());
+			Station st = MainActivity.getStaticObjects(this).get(mPager.getCurrentItem());
 			if (st.getStatus() == Station.DOWNLOADING) {
 				break;
 			}
@@ -96,6 +96,14 @@ public class StationActivity extends AppCompatActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onBackPressed() {
+		Intent returnIntent = new Intent();
+		returnIntent.putExtra("selected", mPager.getCurrentItem());
+		setResult(RESULT_OK,returnIntent);
+		super.onBackPressed();
+	}
+
 	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 		public ScreenSlidePagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -104,7 +112,7 @@ public class StationActivity extends AppCompatActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			Bundle bundle = new Bundle();
-			if (position >= MainActivity.objects.size())
+			if (position >= MainActivity.getStaticObjects(StationActivity.this).size())
 				position = 0;
 			bundle.putInt("position", position);
 			StationFragment fragment = new StationFragment();
@@ -115,7 +123,7 @@ public class StationActivity extends AppCompatActivity implements
 
 		@Override
 		public int getCount() {
-			return MainActivity.objects.size();
+			return MainActivity.getStaticObjects(StationActivity.this).size();
 		}
 	}
 
@@ -127,7 +135,7 @@ public class StationActivity extends AppCompatActivity implements
 	@Override
 	public void onTaskResult(Station st) {
 		mPager.setAdapter(mPagerAdapter);
-		mPager.setCurrentItem(MainActivity.objects.indexOf(st));
+		mPager.setCurrentItem(MainActivity.getStaticObjects(this).indexOf(st));
 		mPagerAdapter.notifyDataSetChanged();
 	}
 }

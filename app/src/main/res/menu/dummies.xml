@@ -13,6 +13,10 @@
         android:title="@string/menu_sel_stationsfile"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/action_userdata"
+        android:orderInCategory="100"
+        android:title="@string/action_userprefs"/>
+    <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:title="@string/action_help"/>

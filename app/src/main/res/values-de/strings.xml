@@ -8,6 +8,7 @@
     <string name="dialog_uname">Name für neue Station</string>
     <string name="dialog_url">URL für neue Station</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="action_userprefs">Benutzerdaten</string>
     <string name="action_new_station">Neue Station erstellen</string>
     <string name="action_refresh">Alle Stationen neu laden</string>
     <string name="title_activity_station_text">Station</string>
@@ -83,4 +84,6 @@ Es gibt drei Möglichkeiten um neue Stationen anzulegen:\n
     <string name="successfully_saved">"Erfolgreich gespeichert: "</string>
     <string name="drawer_close">Navigation schließen</string>
     <string name="drawer_open">Navigation öffnen</string>
+    <string name="userprefs_username">Benutzername</string>
+    <string name="userprefs_password">Passwort</string>
 </resources>

@@ -2,8 +2,10 @@ package com.windnow;
 
 import android.support.annotation.NonNull;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class Station implements Comparable<Station> {
 	public static final int WC = 2;
 	public static final int BZ = 3;
 	public static final int WD = 4;
+	public static final int AC = 5;
 
 	// Status
 	public static final int NOT_LOADED = 1;
@@ -77,11 +80,12 @@ public class Station implements Comparable<Station> {
 			this.type = WC;
 		else if (url.contains("provinz.bz.it") && url.endsWith(".asp"))
 			this.type = BZ;
-		else if (url.contains("wetterdienst.de") && url.contains("Aktuell")) {
+		else if (url.contains("wetterdienst.de") && url.contains("Aktuell"))
 			this.type = WD;
-		} else {
+		else if (url.contains("flug-wetter.at") && url.contains("bin"))
+			this.type = AC;
+		else
 			this.type = PIC;
-		}
 		// Check loaded
 		String filename = "pic" + this.url.hashCode();
 		File file = OnlyContext.getContext().getFileStreamPath(filename);
@@ -201,6 +205,8 @@ public class Station implements Comparable<Station> {
 				this.tabTxt = parseBZ(doc);
 			} else if (this.type == WD) {
 				this.tabTxt = parseWD(doc);
+			} else if (this.type == AC) {
+				this.tabTxt = parseAC(doc);
 			}
 		} catch (IOException e) {
 			LoadSaveOps.printErrorToLog(e);
@@ -362,6 +368,27 @@ public class Station implements Comparable<Station> {
 		}
 		return patschText;
 	}
+
+	// AustroControl
+	public static ArrayList<String> parseAC(Document doc) throws Exception {
+		ArrayList<String> patschText = new ArrayList<>();
+		Elements text = doc.select("pre");
+		for (Element element : text) {
+			BufferedReader bufReader = new BufferedReader(new StringReader(element.ownText()));
+			String line;
+			String paragraph = "";
+			while( (line=bufReader.readLine()) != null ) {
+				if (line.equals(".")) {
+					paragraph += "\n";
+					patschText.add(paragraph);
+					paragraph = "";
+				} else
+					paragraph += line + " ";
+			}
+		}
+		return patschText;
+	}
+
 
 	public static String toCamelCase(String inputString) {
 		String result = "";

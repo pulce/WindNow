@@ -2,14 +2,16 @@ package com.windnow.classes;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.util.Base64;
 
 import com.windnow.Station;
 import com.windnow.statics.LoadSaveOps;
@@ -38,12 +40,11 @@ public class DownloadStation extends AsyncTask<Void, Void, Void> {
 	private Station station;
 	private int maxRetries = 5;
 	private InterfaceDlUpdate update;
-	
+	private static SharedPreferences prefs = PreferenceManager
+			.getDefaultSharedPreferences(OnlyContext.getContext());
+
 	public DownloadStation(InterfaceDlUpdate update, Station station) {
 		this.station = station;
-		//this.maxRetries = Integer.parseInt(PreferenceManager
-		//		.getDefaultSharedPreferences(OnlyContext.getContext())
-		//		.getString("pref_list", "5"));
 		this.update = update;
 	}
 
@@ -54,8 +55,10 @@ public class DownloadStation extends AsyncTask<Void, Void, Void> {
 				station.setProgress(0);
 				String filename = "pic" + station.getUrl().hashCode();
 				int IO_BUFFER_SIZE = 4 * 1024;
+
 				URLConnection uc = new URL(station.getUrl())
 						.openConnection();
+				uc.setRequestProperty("Authorization", "Basic " + Base64.encodeToString((prefs.getString("user_name_pref", "") + ":" + prefs.getString("password_pref", "")).getBytes(), Base64.DEFAULT));
 				int contentLength = uc.getContentLength();
 				InputStream input = new BufferedInputStream(
 						uc.getInputStream(), IO_BUFFER_SIZE);
@@ -85,7 +88,7 @@ public class DownloadStation extends AsyncTask<Void, Void, Void> {
 					station.parseCache();
 				}
 				break;
-			} catch (IOException e) {
+			} catch (Exception e) {
 				if (dlTry == maxRetries) {
 					station.setStatus(Station.DOWNLOAD_ERROR);
 				}

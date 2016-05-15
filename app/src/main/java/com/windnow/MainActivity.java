@@ -9,8 +9,11 @@ import com.windnow.classes.DrawerListAdapter;
 import com.windnow.classes.InterfaceDlUpdate;
 import com.windnow.classes.NavItem;
 import com.windnow.preferences.FilePreferenceFragment;
+import com.windnow.preferences.UserPreferencesFragment;
 import com.windnow.statics.LoadSaveOps;
+import com.windnow.statics.OnlyContext;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -21,6 +24,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +41,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -63,7 +68,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements
         InterfaceDlUpdate, MainFragment.Callbacks {
 
-    public static final String VERSIONID = "2.1.0"; 
+    public static final String VERSIONID = "2.2.0";
     public static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 
     private String sharedUrl = null;
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     private Station activeStation;
     private Parcelable savedListState = null;
 
+    TextView mDrawerTitle;
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -108,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements
             getSupportActionBar().setHomeButtonEnabled(true);
         }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mDrawerTitle = (TextView) findViewById(R.id.drawer_title);
+        mDrawerTitle.setText(LoadSaveOps.getStationsFile().getName());
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -133,8 +141,9 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        mNavItems.add(new NavItem(R.id.action_new_station, R.string.action_new_station, R.drawable.ic_add_circle_outline_grey600_36dp));
         mNavItems.add(new NavItem(R.id.action_file, R.string.menu_sel_stationsfile, R.drawable.ic_input_grey600_36dp));
+        mNavItems.add(new NavItem(R.id.action_new_station, R.string.action_new_station, R.drawable.ic_add_circle_outline_grey600_36dp));
+        mNavItems.add(new NavItem(R.id.action_userdata, R.string.action_userprefs, R.drawable.ic_mode_edit_grey600_36dp));
         mNavItems.add(new NavItem(R.id.action_help, R.string.action_help, R.drawable.ic_help_grey600_36dp));
         mNavItems.add(new NavItem(R.id.action_about, R.string.action_about, R.drawable.ic_info_outline_grey600_36dp));
         mNavItems.add(new NavItem(R.id.action_update, R.string.check_for_updates, R.drawable.ic_file_download_grey600_36dp));
@@ -209,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private boolean onMenuItemSelected(int id) {
-        mDrawerLayout.closeDrawer(Gravity.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         switch (id) {
             case R.id.action_file:
                 if (mTwoPane) {
@@ -219,6 +228,15 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     startActivity(new Intent(getApplicationContext(),
                             FragActivity.class).putExtra("FragType", FragActivity.FILEFRAG));
+                }
+                break;
+            case R.id.action_userdata:
+                if (mTwoPane) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.station_container, new UserPreferencesFragment()).commit();
+                    setTitle(R.string.action_userprefs);
+                } else {
+                    startActivity(new Intent(getApplicationContext(),
+                            FragActivity.class).putExtra("FragType", FragActivity.USERPREFFRAG));
                 }
                 break;
             case R.id.action_help:
@@ -331,12 +349,16 @@ public class MainActivity extends AppCompatActivity implements
                 final EditText stationUrl = (EditText) alertDialog
                         .findViewById(R.id.newStationUrl);
                 if (edit) {
+                    assert stationName != null;
                     stationName.setText(getObjects().get(stationToEdit).getName());
+                    assert stationUrl != null;
                     stationUrl.setText(getObjects().get(stationToEdit).getUrl());
                     position = stationToEdit;
                 }
                 if (share) {
+                    assert stationName != null;
                     stationName.setText("");
+                    assert stationUrl != null;
                     stationUrl.setText(sharedUrl);
                 }
                 final Spinner dropdown = (Spinner) alertDialog
@@ -348,10 +370,12 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, items);
+                assert dropdown != null;
                 dropdown.setAdapter(adapter);
                 dropdown.setSelection(position);
                 Button okButton = (Button) alertDialog
                         .findViewById(R.id.btn_confirm);
+                assert okButton != null;
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -362,6 +386,8 @@ public class MainActivity extends AppCompatActivity implements
                             newStation.setUrl(stationUrl.getText().toString());
                             getObjects().remove(newStation);
                         } else {
+                            assert stationName != null;
+                            assert stationUrl != null;
                             newStation = new Station(stationName.getText()
                                     .toString(), stationUrl.getText().toString());
                         }
@@ -376,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 Button cancelButton = (Button) alertDialog
                         .findViewById(R.id.btn_cancel);
+                assert cancelButton != null;
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -388,6 +415,7 @@ public class MainActivity extends AppCompatActivity implements
                 Button editButton = (Button) alertDialog.findViewById(R.id.edit_st);
                 Button delButton = (Button) alertDialog.findViewById(R.id.delete);
                 Button fullButton = (Button) alertDialog.findViewById(R.id.fullscreen);
+                assert refButton != null;
                 refButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -395,6 +423,7 @@ public class MainActivity extends AppCompatActivity implements
                         initiateDl(getObjects().get(id));
                     }
                 });
+                assert editButton != null;
                 editButton.setOnClickListener(new View.OnClickListener() {
                     @SuppressWarnings("deprecation")
                     @Override
@@ -404,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements
                         showDialog(DIALOG_EDIT_STAT);
                     }
                 });
+                assert delButton != null;
                 delButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -470,6 +500,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            refreshView();
+        }
+    }
+
+
     @SuppressWarnings("deprecation")
     @Override
     public void OnItemLongClicked(int position) {
@@ -477,16 +515,21 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public ArrayList<Station> getObjects() {
+        return getStaticObjects(this);
+    }
+
+    public static ArrayList<Station> getStaticObjects(Context context) {
         if (objects.size() == 0) {
             try {
                 objects.addAll(LoadSaveOps.loadStations());
             } catch (Exception e) {
                 LoadSaveOps.printErrorToLog(e);
-                Toast.makeText(this,
-                        getString(R.string.error_loading_stations_file),
+                Toast.makeText(context,
+                        OnlyContext.getContext().getString(R.string.error_loading_stations_file),
                         Toast.LENGTH_SHORT).show();
             }
         }
         return objects;
     }
+
 }

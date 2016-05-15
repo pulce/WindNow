@@ -1,7 +1,7 @@
 Patscherkofel;http://www.wetteronline.de/aktuelles-wetter?gid=11126
 Zugspitze;http://www.wetteronline.de/aktuelles-wetter?gid=10961
 Südtirol;http://www.provinz.bz.it/wetter/hoehenwindstationen.asp
-Wallberg;http://80.157.135.194/wetter_uebersicht_tegernsee/windrichtung24.php
+Wallberg;http://wetterstationen.meteomedia.de/messnetz/wettergrafik/109760.png
 Brauneck;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bybewind.png
 Blomberg;http://data.snowreporter.net/windreporter/plugins/diagramme/station_1004/windrichtung.php?hours=5&kmh=0
 Kampenwand;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bykwwind.png
@@ -10,3 +10,4 @@ Schlick;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/schlickeralm.png
 Hohe Munde;https://apps.tirol.gv.at/lwd/grafiken/540/standard/tag/hohemunde.png
 Wasserkuppe;http://www.wetterdienst.de/Europawetter/Wasserkuppe~2813735/Aktuell/
 Föhnalarm;http://www.wetteralarm.at/uploads/pics/uwz-at_foehn_de.png
+Zillertal;http://human:eagle@www.flug-wetter.at/alptherm/Bilder/gg093.png

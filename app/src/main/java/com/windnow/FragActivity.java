@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.windnow.preferences.FilePreferenceFragment;
+import com.windnow.preferences.UserPreferencesFragment;
 
 /**
  * This Class is part of WindNow.
@@ -33,6 +34,8 @@ public class FragActivity extends AppCompatActivity {
 
     public static final int HELPFRAG = 1;
     public static final int FILEFRAG = 2;
+    public static final int USERPREFFRAG = 3;
+
     private int thisType;
     private Fragment frag = null;
 
@@ -51,6 +54,10 @@ public class FragActivity extends AppCompatActivity {
                 break;
             case FILEFRAG:
                 frag = new FilePreferenceFragment();
+                 break;
+            case USERPREFFRAG:
+                frag = new UserPreferencesFragment();
+                setTitle(R.string.action_userprefs);
                 break;
         }
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, frag).commit();

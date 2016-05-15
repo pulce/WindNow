@@ -4,6 +4,7 @@
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
     </style>
 
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
 
@@ -19,6 +20,8 @@
 
         <!-- For each individual Spinner list item once clicked on -->
         <item name="android:spinnerDropDownItemStyle">            @style/spinnerDropDownItemStyle</item>
+
+        <item name="preferenceTheme">@style/MyPreferenceStyle</item>
     </style>
 
     <style name="spinnerItemStyle">
@@ -35,6 +38,10 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="MyPreferenceStyle" parent="PreferenceThemeOverlay">
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

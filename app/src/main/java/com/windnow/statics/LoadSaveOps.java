@@ -53,7 +53,7 @@ public class LoadSaveOps {
 			.getDefaultSharedPreferences(OnlyContext.getContext());
 	private static String sep = ";";
 
-	static File getStationsFile() {
+	public static File getStationsFile() {
 		return new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath()
 				+ "/"

@@ -11,7 +11,6 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.FloatMath;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -73,7 +72,7 @@ public class StationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments().containsKey("position")) {
-			st = MainActivity.objects.get(getArguments().getInt("position"));
+			st = MainActivity.getStaticObjects(getActivity()).get(getArguments().getInt("position"));
 		}
 	}
 	
@@ -120,7 +119,17 @@ public class StationFragment extends Fragment {
 			Bitmap pic;
 			try {
 				FileInputStream is = getActivity().openFileInput(filename);
-				pic = BitmapFactory.decodeStream(is);
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inPreferredConfig = Bitmap.Config.RGB_565;
+				options.inJustDecodeBounds = true;
+				pic = BitmapFactory.decodeStream(is, null, options);
+				is.close();
+				is = getActivity().openFileInput(filename);
+				int size = Math.max(options.outHeight, options.outWidth);
+				if(size>1024)
+					options.inSampleSize = Math.round(size / 800);
+				options.inJustDecodeBounds = false;
+				pic = BitmapFactory.decodeStream(is, null, options);
 				is.close();
 				imageDetail.setImageBitmap(pic);
 			} catch (Exception e) {
@@ -212,7 +221,7 @@ public class StationFragment extends Fragment {
 				private float spacing(MotionEvent event) {
 					float x = event.getX(0) - event.getX(1);
 					float y = event.getY(0) - event.getY(1);
-					return FloatMath.sqrt(x * x + y * y);
+					return (float)Math.sqrt(x * x + y * y);
 				}
 
 				private void midPoint(PointF point, MotionEvent event) {
