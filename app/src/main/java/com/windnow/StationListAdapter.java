@@ -2,8 +2,6 @@ package com.windnow;
 
 import java.util.List;
 
-import com.windnow.statics.OnlyContext;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,9 +1,18 @@
 package com.windnow;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.DateFormat;
@@ -18,7 +27,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.windnow.statics.LoadSaveOps;
-import com.windnow.statics.OnlyContext;
 
 /**
  * 
@@ -389,6 +397,38 @@ public class Station implements Comparable<Station> {
 		return patschText;
 	}
 
+	/*
+	public static ArrayList<String> parseACTAB(Document doc) throws Exception {
+		String text = doc.toString();
+		final Rect bounds = new Rect();
+		TextPaint textPaint = new TextPaint() {
+			{
+				setColor(Color.WHITE);
+				setTextAlign(Paint.Align.LEFT);
+				setTextSize(20f);
+				setAntiAlias(true);
+			}
+		};
+		textPaint.getTextBounds(text, 0, text.length(), bounds);
+		StaticLayout mTextLayout = new StaticLayout(text, textPaint,
+				bounds.width(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+		int maxWidth = -1;
+		for (int i = 0; i < mTextLayout.getLineCount(); i++) {
+			if (maxWidth < mTextLayout.getLineWidth(i)) {
+				maxWidth = (int) mTextLayout.getLineWidth(i);
+			}
+		}
+		final Bitmap bmp = Bitmap.createBitmap(maxWidth , mTextLayout.getHeight(),
+				Bitmap.Config.ARGB_8888);
+		bmp.eraseColor(Color.BLACK);// just adding black background
+		final Canvas canvas = new Canvas(bmp);
+		mTextLayout.draw(canvas);
+		FileOutputStream stream = new FileOutputStream(...); //create your FileOutputStream here
+		bmp.compress(Bitmap.CompressFormat.PNG, 85, stream);
+		bmp.recycle();
+		stream.close();
+		return patschText;
+	}*/
 
 	public static String toCamelCase(String inputString) {
 		String result = "";

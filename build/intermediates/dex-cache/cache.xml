@@ -2,88 +2,74 @@
 <items version="2" >
 
     <item
+        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-support-v4-23.4.0_89782d66b0a7ec981085d3bd667dcb988e253cc8.jar" />
+    </item>
+    <item
         jar="/home/pulce/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.8.2/64238922c4006c3d0a9951c4c03983ecc6a1e1a0/jsoup-1.8.2.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="23.0.2"
         sha1="64238922c4006c3d0a9951c4c03983ecc6a1e1a0">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/jsoup-1.8.2_e8afcc43567fcd2bf98594e7e96dc36c21db97f2/classes.dex" />
-    </item>
-    <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
-        jumboMode="true"
-        revision="23.0.2"
-        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.4.0_cf36d44ba4c9975a4abcc29341217c2ae152cc61/classes.dex" />
-    </item>
-    <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="23.0.2"
-        sha1="efd003e935839a90bdee07d92fa1ccf62312783b">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_ddf6d5604b1ab20917fcda197d0b71e4fb492e91/classes.dex" />
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/jsoup-1.8.2_e8afcc43567fcd2bf98594e7e96dc36c21db97f2.jar" />
     </item>
     <item
         jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="23.0.2"
         sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_2408f062fbd9083fd3073a5b223d6035501c1ebb/classes.dex" />
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-support-vector-drawable-23.4.0_2408f062fbd9083fd3073a5b223d6035501c1ebb.jar" />
     </item>
     <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="false"
         revision="23.0.2"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_6f2564bf347d678100442616e74263437151e5dd/classes.dex" />
-    </item>
-    <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        revision="23.0.2"
-        sha1="8dc0d425afe33a9ea0217cd89ac922860e2190e7">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_d26e8e0794bc1209c99c9a72cc21c967e4d7027e/classes.dex" />
-    </item>
-    <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/preference-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        revision="23.0.2"
-        sha1="b954d8588de65c67c1ec482678620845bbb5f737">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-preference-v7-23.4.0_41def831a9c0861bd8c6a434afad460a21476add/classes.dex" />
-    </item>
-    <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        revision="23.0.2"
-        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_19de2ca52a3a023f5e0fbb7a492f31e1f1d5d7a8/classes.dex" />
-    </item>
-    <item
-        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        revision="23.0.2"
-        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.4.0_89782d66b0a7ec981085d3bd667dcb988e253cc8/classes.dex" />
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/internal_impl-23.4.0_cf36d44ba4c9975a4abcc29341217c2ae152cc61.jar" />
     </item>
     <item
         jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="23.0.2"
         sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_5ce55dd7557ea566ce47321ef6a045b001ece6ee/classes.dex" />
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-recyclerview-v7-23.4.0_5ce55dd7557ea566ce47321ef6a045b001ece6ee.jar" />
     </item>
     <item
-        jar="/home/pulce/android-sdk-linux/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
-        jumboMode="true"
+        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/preference-v7/23.4.0/jars/classes.jar"
+        jumboMode="false"
         revision="23.0.2"
-        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_76f4a45f5830a03747ea597da3395609818c0dbf/classes.dex" />
+        sha1="b954d8588de65c67c1ec482678620845bbb5f737">
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-preference-v7-23.4.0_41def831a9c0861bd8c6a434afad460a21476add.jar" />
+    </item>
+    <item
+        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-animated-vector-drawable-23.4.0_19de2ca52a3a023f5e0fbb7a492f31e1f1d5d7a8.jar" />
     </item>
     <item
         jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/support-v4-preferencefragment/1.0.0/jars/classes.jar"
-        jumboMode="true"
+        jumboMode="false"
         revision="23.0.2"
         sha1="f1678f81f938d991e46e194eacf1f224ffbf970f">
-        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-preferencefragment-1.0.0_a3f9f652d2213c483c127e00c037e6aaf0bed8f9/classes.dex" />
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-support-v4-preferencefragment-1.0.0_a3f9f652d2213c483c127e00c037e6aaf0bed8f9.jar" />
+    </item>
+    <item
+        jar="/home/pulce/android-sdk-linux/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/support-annotations-23.4.0_76f4a45f5830a03747ea597da3395609818c0dbf.jar" />
+    </item>
+    <item
+        jar="/home/pulce/InSync/WindNow/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/home/pulce/InSync/WindNow/app/build/intermediates/pre-dexed/release/com.android.support-appcompat-v7-23.4.0_6f2564bf347d678100442616e74263437151e5dd.jar" />
     </item>
 
 </items>

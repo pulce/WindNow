@@ -1,6 +1,6 @@
 package com.windnow.classes;
 
-import com.windnow.statics.OnlyContext;
+import com.windnow.OnlyContext;
 
 /**
  * This Class is part of WindNow.

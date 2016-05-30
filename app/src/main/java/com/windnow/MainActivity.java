@@ -11,9 +11,10 @@ import com.windnow.classes.NavItem;
 import com.windnow.preferences.FilePreferenceFragment;
 import com.windnow.preferences.UserPreferencesFragment;
 import com.windnow.statics.LoadSaveOps;
-import com.windnow.statics.OnlyContext;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -23,13 +24,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,7 +70,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements
         InterfaceDlUpdate, MainFragment.Callbacks {
 
-    public static final String VERSIONID = "2.2.0";
+    public static final String VERSIONID = "2.2.1";
     public static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 
     private String sharedUrl = null;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements
     public static final ArrayList<Station> objects = new ArrayList<>();
 
     private static final String LIST_STATE = "listState";
+    private static final int PERMISSION_WRITE_STORAGE = 42;
+    private static boolean writePermitted = false;
 
     private boolean mTwoPane;
     private Station activeStation;
@@ -95,6 +99,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        writePermitted = (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!writePermitted) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, R.string.permission_info, Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_WRITE_STORAGE);
+            }
+        }
         setContentView(R.layout.activity_main_list);
         setTitle(R.string.app_name);
         if (findViewById(R.id.station_container) != null) {
@@ -519,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public static ArrayList<Station> getStaticObjects(Context context) {
-        if (objects.size() == 0) {
+        if (objects.size() == 0 && writePermitted) {
             try {
                 objects.addAll(LoadSaveOps.loadStations());
             } catch (Exception e) {
@@ -530,6 +545,24 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
         return objects;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_WRITE_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    writePermitted = true;
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, R.string.permission_info, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
 }
