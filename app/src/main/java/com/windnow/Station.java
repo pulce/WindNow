@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -202,9 +204,21 @@ public class Station implements Comparable<Station> {
 		this.valued = valued;
 	}
 
+	private void logLongString(String veryLongString) {
+		int maxLogSize = 1000;
+		for(int i = 0; i <= veryLongString.length() / maxLogSize; i++) {
+			int start = i * maxLogSize;
+			int end = (i+1) * maxLogSize;
+			end = end > veryLongString.length() ? veryLongString.length() : end;
+			Log.v("LongLog", veryLongString.substring(start, end));
+		}
+	}
+
 	public void parseCache() {
 		String filename = "pic" + this.url.hashCode();
 		try {
+			//logLongString(new Scanner(OnlyContext.getContext()
+			//		.getFileStreamPath(filename)).useDelimiter("\\Z").next());
 			Document doc = Jsoup.parse(OnlyContext.getContext()
 					.getFileStreamPath(filename), null);
 			if (this.type == WC) {
@@ -228,6 +242,7 @@ public class Station implements Comparable<Station> {
 		ArrayList<String> patschText = new ArrayList<>();
 		Elements tableElements = doc
 				.select("table[class=hourly]:has(th:contains(Spitze))");
+		Log.d("Tabbbbble Elements", "" + tableElements.size());
 		// Handle Stations that deliver data only every 6 hours
 		if (tableElements.size() == 0) {
 			tableElements = doc
@@ -238,6 +253,7 @@ public class Station implements Comparable<Station> {
 		ArrayList<String> units = new ArrayList<>();
 		Elements tableHeads = tableElements.select("thead tr").first()
 				.select("th");
+		Log.d("Elementheader", tableHeads.toString());
 		for (Element elm : tableHeads) {
 			headers.add(elm.text() + ": ");
 			if (elm.toString().contains("colspan"))

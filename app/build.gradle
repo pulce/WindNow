@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.windnow"
-        minSdkVersion 8
-        targetSdkVersion 23
+        applicationId project.ext.myApplicationID
+        minSdkVersion project.ext.myMinSdkVersion
+        targetSdkVersion project.ext.myTargetSdkVersion
+        versionCode project.ext.myVersionCode
+        versionName project.ext.myVersionNumber
     }
 
     buildTypes {
@@ -15,12 +18,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
-    }
+     }
 }
 
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
+    //maven { url 'https://mvnrepository.com/artifact/commons-io/commons-io' }
 }
 
 dependencies {
@@ -31,4 +36,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:preference-v7:23.4.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
+    //compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }

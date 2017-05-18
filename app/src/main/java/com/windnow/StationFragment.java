@@ -72,7 +72,8 @@ public class StationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments().containsKey("position")) {
-			st = MainActivity.getStaticObjects(getActivity()).get(getArguments().getInt("position"));
+			if (MainActivity.getStaticObjects(getActivity()).size() > getArguments().getInt("position"))
+				st = MainActivity.getStaticObjects(getActivity()).get(getArguments().getInt("position"));
 		}
 	}
 	
@@ -237,9 +238,10 @@ public class StationFragment extends Fragment {
 			la.addView(sv);
 			tl = new TableLayout(getActivity());
 			sv.addView(tl);
-
-			for (String row : st.getTabTxt()) {
-				printTableRow(row);
+			if (st.getTabTxt() != null) {
+				for (String row : st.getTabTxt()) {
+					printTableRow(row);
+				}
 			}
 		}
 		return rootView;

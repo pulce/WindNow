@@ -2,6 +2,7 @@ package com.windnow;
 
 import java.util.ArrayList;
 
+import com.crashlytics.android.Crashlytics;
 import com.windnow.classes.AboutDialog;
 import com.windnow.classes.CheckForUpdates;
 import com.windnow.classes.DownloadStation;
@@ -46,6 +47,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.fabric.sdk.android.*;
+
 /**
  * This Class is part of WindNow.
  * <p/>
@@ -70,7 +73,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements
         InterfaceDlUpdate, MainFragment.Callbacks {
 
-    public static final String VERSIONID = "2.2.1";
+    public static String VERSIONID;
     public static final String APPURL = "https://github.com/pulce/WindNow/releases/latest";
 
     private String sharedUrl = null;
@@ -99,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        VERSIONID = BuildConfig.VERSION_NAME;
         writePermitted = (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
         if (!writePermitted) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
@@ -171,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements
             //noinspection deprecation
             showDialog(DIALOG_SHARE_STAT);
         }
-    }
+     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle state) {
@@ -534,6 +539,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public static ArrayList<Station> getStaticObjects(Context context) {
+        writePermitted = (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
         if (objects.size() == 0 && writePermitted) {
             try {
                 objects.addAll(LoadSaveOps.loadStations());
