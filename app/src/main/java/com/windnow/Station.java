@@ -299,8 +299,9 @@ public class Station implements Comparable<Station> {
 	private static ArrayList<String> parseBZ(Document doc) throws Exception {
 		ArrayList<String> patschText = new ArrayList<>();
 		Elements tableElements = doc
-				.select("table[class=avalanches-stations]:contains(Messstationen)");
+				.select("table[class=avalanches-stations tbl_bezirkwetter table table-striped]:contains(Messstationen)");
 		// Headers
+		Log.d("BZ Elements", "" + tableElements.size());
 		ArrayList<String> searchers = new ArrayList<>();
 		searchers.add("dd");
 		searchers.add("ff");
