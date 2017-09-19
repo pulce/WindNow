@@ -21,8 +21,8 @@ allprojects {
     }
     project.ext {
         myApplicationID="com.windnow"
-        myVersionCode=14
-        myVersionNumber="2.2.4"
+        myVersionCode=15
+        myVersionNumber="2.2.5"
         myMinSdkVersion=8
         myTargetSdkVersion=23
         myCompileSdkVersion=23

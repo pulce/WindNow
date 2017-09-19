@@ -1,5 +1,5 @@
-Patscherkofel;http://www.wetteronline.de/aktuelles-wetter?gid=11126
-Zugspitze;http://www.wetteronline.de/aktuelles-wetter?gid=10961
+Patscherkofel;https://www.wetteronline.de/aktuelles-wetter?gid=11126
+Zugspitze;https://www.wetteronline.de/aktuelles-wetter?gid=10961
 Südtirol;http://wetter.provinz.bz.it/hoehenwindstationen.asp
 Wallberg;http://wetterstationen.meteomedia.de/messnetz/wettergrafik/109760.png
 Brauneck;http://www.lawinenwarndienst-bayern.de/download/messdaten/tagesgrafiken/bybewind.png
